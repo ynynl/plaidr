@@ -1,4 +1,4 @@
-import ImageUpload from "./components/ImageUpload";
+import PlaidGenerator from "./components/PlaidGenerator";
 
 function App() {
   return (
@@ -6,10 +6,8 @@ function App() {
       <header className="App-header">
       </header>
       <main>
-        <ImageUpload width={600}/>
+        <PlaidGenerator />
       </main>
-
-
     </div>
   );
 }
