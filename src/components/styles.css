@@ -1,0 +1,31 @@
+@media screen and (max-width: 600px) {
+    .container {
+        width: 100%;
+    }
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.preview {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.full-screen-overlay {
+    width: 100vw;
+    height: 100vh;
+    background-repeat: repeat;
+    position: fixed;
+    top: 0;
+    left: 0;
+}

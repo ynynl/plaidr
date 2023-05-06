@@ -5,9 +5,21 @@ import {
   ColorPicker,
   TwillPicker,
   SizePicker,
-  GenerateButtons,
 } from "./Picker";
+import GenerateButtons from "./GenerateButtons";
 import ImageUploader from "./ImageUploader";
+import './styles.css';
+
+const ImagePreview = ({ image, onClick }) => {
+  return (
+    <img
+      src={image}
+      alt="preview"
+      className="preview"
+      onClick={onClick}
+    />
+  );
+};
 
 const PlaidGenerator = () => {
   const [image, setImage] = useState(null);
@@ -20,6 +32,7 @@ const PlaidGenerator = () => {
   });
   const [numOfColor, setNumOfColor] = useState(5);
   const [rgbArray, setRgbArray] = useState([]);
+  const [showOverlay, setShowOverlay] = useState(false); // new state variable
 
   const getNewPivots = (currNumOfColor = numOfColor) =>
     randomPivots(currNumOfColor - 1);
@@ -53,56 +66,43 @@ const PlaidGenerator = () => {
   }, [plaidSettings]);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <TwillPicker
-        twill={plaidSettings.twill}
-        setTwill={(twill) => setPlaidSettings({ ...plaidSettings, twill })}
-      />
-      <SizePicker
-        size={plaidSettings.size}
-        setSize={(size) => setPlaidSettings({ ...plaidSettings, size })}
-      />
-      <ColorPicker
-        numOfColor={numOfColor}
-        handleNewNumOfColor={handleNewNumOfColor}
-      />
-      <GenerateButtons
-        pivots={plaidSettings.pivots}
-        getNewPivots={getNewPivots}
-        colors={plaidSettings.colors}
-        getNewColors={getNewColors}
-        setPivotsAndColors={(pivotsAndColors) =>
-          setPlaidSettings({ ...plaidSettings, ...pivotsAndColors })
-        }
-      />
-      {image && (
-        <img
-          src={image}
-          alt="uploaded"
-          style={{ width: "300px", height: "300px", objectFit: "cover" }}
+    <>
+      <div className="container">
+        <ImageUploader
+          setImage={setImage}
+          handleNewRgbArray={handleNewRgbArray}
         />
-      )}
-      <ImageUploader
-        setImage={setImage}
-        handleNewRgbArray={handleNewRgbArray}
-      />
-
-      {plaidImage && (
-        <img
-          src={plaidImage}
-          alt="generated tartan"
-          style={{ width: "300px", height: "300px" }}
+        <TwillPicker
+          twill={plaidSettings.twill}
+          setTwill={(twill) => setPlaidSettings({ ...plaidSettings, twill })}
         />
-      )}
-    </div>
+        <SizePicker
+          size={plaidSettings.size}
+          setSize={(size) => setPlaidSettings({ ...plaidSettings, size })}
+        />
+        <ColorPicker
+          numOfColor={numOfColor}
+          handleNewNumOfColor={handleNewNumOfColor}
+        />
+        <GenerateButtons
+          getNewPivots={getNewPivots}
+          getNewColors={getNewColors}
+          setPivotsAndColors={(pivotsAndColors) =>
+            setPlaidSettings({ ...plaidSettings, ...pivotsAndColors })
+          }
+        />
+        {!!image && <ImagePreview image={image} />}
+        {!!plaidImage && <ImagePreview image={plaidImage} onClick={() => setShowOverlay(true)}/>}
+      </div>
+      {showOverlay && <div
+        className="full-screen-overlay"
+        onClick={() => setShowOverlay(false)}
+        style={{
+          backgroundImage: `url(${plaidImage})`,
+        }} />}
+    </>
   );
 };
 
 export default PlaidGenerator;
+
