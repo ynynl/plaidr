@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import generatePlaid from "../utils/generator";
 import { arrayToDataURL, getRandomItems, randomPivots } from "../utils/utils";
-import { ColorPicker, TwillPicker, SizePicker } from "./Picker";
+import {
+  ColorPicker,
+  TwillPicker,
+  SizePicker,
+  GenerateButtons,
+} from "./Picker";
 import ImageUploader from "./ImageUploader";
 
 const PlaidGenerator = () => {
@@ -16,12 +21,17 @@ const PlaidGenerator = () => {
   const [numOfColor, setNumOfColor] = useState(5);
   const [rgbArray, setRgbArray] = useState([]);
 
+  const getNewPivots = (currNumOfColor = numOfColor) =>
+    randomPivots(currNumOfColor - 1);
+  const getNewColors = (currNumOfColor = numOfColor, cuurRgbArray = rgbArray) =>
+    getRandomItems(cuurRgbArray, currNumOfColor);
+
   const handleNewRgbArray = (newRgbArray) => {
     setRgbArray(newRgbArray);
     setPlaidSettings({
       ...plaidSettings,
-      colors: getRandomItems(newRgbArray, numOfColor),
-      pivots: randomPivots(numOfColor - 1),
+      colors: getNewColors(numOfColor, newRgbArray),
+      pivots: getNewPivots(),
     });
   };
 
@@ -29,8 +39,8 @@ const PlaidGenerator = () => {
     setNumOfColor(newNumOfColor);
     setPlaidSettings({
       ...plaidSettings,
-      pivots: randomPivots(newNumOfColor - 1),
-      colors: getRandomItems(rgbArray, newNumOfColor),
+      pivots: getNewPivots(newNumOfColor),
+      colors: getNewColors(newNumOfColor),
     });
   };
 
@@ -43,8 +53,14 @@ const PlaidGenerator = () => {
   }, [plaidSettings]);
 
   return (
-    <div>
-      <ImageUploader setImage={setImage} handleNewRgbArray={handleNewRgbArray} />
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <TwillPicker
         twill={plaidSettings.twill}
         setTwill={(twill) => setPlaidSettings({ ...plaidSettings, twill })}
@@ -56,17 +72,14 @@ const PlaidGenerator = () => {
       <ColorPicker
         numOfColor={numOfColor}
         handleNewNumOfColor={handleNewNumOfColor}
-        handleNewColor={() =>
-          setPlaidSettings({
-            ...plaidSettings,
-            colors: getRandomItems(rgbArray, numOfColor),
-          })
-        }
-        handleNewPivots={() =>
-          setPlaidSettings({
-            ...plaidSettings,
-            pivots: randomPivots(numOfColor - 1),
-          })
+      />
+      <GenerateButtons
+        pivots={plaidSettings.pivots}
+        getNewPivots={getNewPivots}
+        colors={plaidSettings.colors}
+        getNewColors={getNewColors}
+        setPivotsAndColors={(pivotsAndColors) =>
+          setPlaidSettings({ ...plaidSettings, ...pivotsAndColors })
         }
       />
       {image && (
@@ -76,6 +89,11 @@ const PlaidGenerator = () => {
           style={{ width: "300px", height: "300px", objectFit: "cover" }}
         />
       )}
+      <ImageUploader
+        setImage={setImage}
+        handleNewRgbArray={handleNewRgbArray}
+      />
+
       {plaidImage && (
         <img
           src={plaidImage}

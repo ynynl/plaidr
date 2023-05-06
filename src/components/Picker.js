@@ -1,11 +1,6 @@
 import React from "react";
 
-export const ColorPicker = ({
-  numOfColor,
-  handleNewColor,
-  handleNewPivots,
-  handleNewNumOfColor,
-}) => {
+export const ColorPicker = ({ numOfColor, handleNewNumOfColor }) => {
   const handleNumOfColorChange = (event) => {
     const newNumOfColor = event.target.value;
     handleNewNumOfColor(newNumOfColor);
@@ -23,11 +18,46 @@ export const ColorPicker = ({
         value={numOfColor}
         onChange={handleNumOfColorChange}
       />
+    </div>
+  );
+};
+
+export const GenerateButtons = ({
+  pivots,
+  getNewPivots,
+  colors,
+  getNewColors,
+  setPivotsAndColors,
+}) => {
+  const handleNewColor = () =>
+    setPivotsAndColors({
+      pivots,
+      colors: getNewColors(),
+    });
+
+  const handleNewPivots = () =>
+    setPivotsAndColors({
+      colors,
+      pivots: getNewPivots(),
+    });
+
+  const handleNewPivotsAndColor = () =>
+    setPivotsAndColors({
+      colors: getNewColors(),
+      pivots: getNewPivots(),
+    });
+  return (
+    <div style={{ display: "flex" }}>
       <div>
         <button onClick={handleNewPivots}>Generate New Pivots</button>
       </div>
       <div>
         <button onClick={handleNewColor}>Generate New Colors</button>
+      </div>
+      <div>
+        <button onClick={handleNewPivotsAndColor}>
+          Generate New Pivots and Colors
+        </button>
       </div>
     </div>
   );
