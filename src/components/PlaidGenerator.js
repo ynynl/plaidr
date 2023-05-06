@@ -8,32 +8,31 @@ import ImageUploader from "./ImageUploader";
 const PlaidGenerator = () => {
   const [image, setImage] = useState(null);
   const [plaidImage, setPlaidImage] = useState(null);
+  const [plaidSettings, setPlaidSettings] = useState({
+    colors: [],
+    size: 128,
+    twill: "tartan",
+    pivots: []
+  });
   const [numOfColor, setNumOfColor] = useState(5);
-  const [twill, setTwill] = useState("tartan");
   const [rgbArray, setRgbArray] = useState([]);
-  const [size, setSize] = useState(128);
-  const [colors, setColors] = useState([]);
-  const [pivots, setPivots] = useState([]);
 
   const initiatePlaid = (newRgbArray) => {
     setRgbArray(newRgbArray);
-    setColors(getRandomItems(newRgbArray, 5));
-    setPivots(randomPivots(4));
-    setNumOfColor(5);
+    setPlaidSettings({
+      ...plaidSettings,
+      colors: getRandomItems(newRgbArray, numOfColor),
+      pivots: randomPivots(numOfColor-1)
+    });
   }
 
   useEffect(() => {
-    if (rgbArray.length > 0) {
-      const plaid = generatePlaid({
-        colors,
-        size,
-        twill,
-        pivots,
-      });
+    if (plaidSettings.colors.length > 0) {
+      const plaid = generatePlaid(plaidSettings);
       const plaidImageData = arrayToDataURL(plaid);
       setPlaidImage(plaidImageData);
     }
-  }, [colors, pivots, rgbArray, size, twill]);
+  }, [plaidSettings]);
 
   return (
     <div>
@@ -41,9 +40,21 @@ const PlaidGenerator = () => {
         setImage={setImage}
         initiatePlaid={initiatePlaid}
       />
-      <ColorPicker rgbArray={rgbArray} numOfColor={numOfColor} setColors={setColors} setPivots={setPivots} setNumOfColor={setNumOfColor} />
-      <TwillPicker twill={twill} setTwill={setTwill} />
-      <SizePicker size={size} setSize={setSize} />
+      <ColorPicker
+        rgbArray={rgbArray}
+        numOfColor={numOfColor}
+        setNumOfColor={setNumOfColor}
+        setColors={(colors) => setPlaidSettings({...plaidSettings, colors})}
+        setPivots={(pivots) => setPlaidSettings({...plaidSettings, pivots})}
+      />
+      <TwillPicker
+        twill={plaidSettings.twill}
+        setTwill={(twill) => setPlaidSettings({...plaidSettings, twill})}
+      />
+      <SizePicker
+        size={plaidSettings.size}
+        setSize={(size) => setPlaidSettings({...plaidSettings, size})}
+      />
       {image && <img src={image} alt="uploaded" style={{ width: "300px", height: "300px", objectFit: "cover" }} />}
       {plaidImage && (
         <img
