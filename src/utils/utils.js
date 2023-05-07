@@ -1,4 +1,4 @@
-export function randomPivots(length) {
+export function getRandomPivots(length) {
   const randomN2 = Array.from({ length }, () => {
     const pair = [Math.random(), Math.random()];
     return pair.sort();

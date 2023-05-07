@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import generatePlaid from "../utils/generator";
-import { arrayToDataURL, getRandomItems, randomPivots } from "../utils/utils";
+import generatePlaid from "../utils/plaid";
+import { arrayToDataURL, getRandomItems, getRandomPivots } from "../utils/utils";
 import {
   ColorPicker,
   TwillPicker,
@@ -21,7 +21,7 @@ const ImagePreview = ({ image, onClick }) => {
   );
 };
 
-const PlaidGenerator = () => {
+const Plaidr = () => {
   const [image, setImage] = useState(null);
   const [plaidImage, setPlaidImage] = useState(null);
   const [plaidSettings, setPlaidSettings] = useState({
@@ -35,7 +35,7 @@ const PlaidGenerator = () => {
   const [showOverlay, setShowOverlay] = useState(false); // new state variable
 
   const getNewPivots = (currNumOfColor = numOfColor) =>
-    randomPivots(currNumOfColor - 1);
+    getRandomPivots(currNumOfColor - 1);
   const getNewColors = (currNumOfColor = numOfColor, cuurRgbArray = rgbArray) =>
     getRandomItems(cuurRgbArray, currNumOfColor);
 
@@ -92,7 +92,7 @@ const PlaidGenerator = () => {
           }
         />
         {!!image && <ImagePreview image={image} />}
-        {!!plaidImage && <ImagePreview image={plaidImage} onClick={() => setShowOverlay(true)}/>}
+        {!!plaidImage && <ImagePreview image={plaidImage} onClick={() => setShowOverlay(true)} />}
       </div>
       {showOverlay && <div
         className="full-screen-overlay"
@@ -104,5 +104,5 @@ const PlaidGenerator = () => {
   );
 };
 
-export default PlaidGenerator;
+export default Plaidr;
 

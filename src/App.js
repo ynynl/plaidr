@@ -1,4 +1,4 @@
-import PlaidGenerator from "./components/PlaidGenerator";
+import Plaidr from "./components/Plaidr";
 
 function App() {
   return (
@@ -6,7 +6,7 @@ function App() {
       <header className="App-header">
       </header>
       <main>
-        <PlaidGenerator />
+        <Plaidr />
       </main>
     </div>
   );
