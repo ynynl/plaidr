@@ -16,38 +16,60 @@ export const getRandomItems = (arr, num) => {
   return result;
 };
 
-// Helper function to convert a 3D array of RGB values to a data URL
-export const arrayToDataURL = (imageArray) => {
-  const patternCanvas = document.createElement("canvas");
-  patternCanvas.width = imageArray.length;
-  patternCanvas.height = imageArray[0].length;
-
-  const patternContext = patternCanvas.getContext("2d");
-  const imageData = patternContext.createImageData(patternCanvas.width, patternCanvas.height);
-  for (let x = 0; x < patternCanvas.width; x++) {
-    for (let y = 0; y < patternCanvas.height; y++) {
-      const pixelIndex = (y * patternCanvas.width + x) * 4;
+// Helper function to convert a 2D array of RGB values to image data
+const arrayToImageData = (imageArray) => {
+  const imageData = new ImageData(imageArray.length, imageArray[0].length);
+  for (let x = 0; x < imageArray.length; x++) {
+    for (let y = 0; y < imageArray[x].length; y++) {
+      const pixelIndex = (y * imageData.width + x) * 4;
       imageData.data[pixelIndex] = imageArray[x][y][0];
       imageData.data[pixelIndex + 1] = imageArray[x][y][1];
       imageData.data[pixelIndex + 2] = imageArray[x][y][2];
       imageData.data[pixelIndex + 3] = 255;
     }
   }
+  return imageData;
+};
 
+// Helper function to convert image data to pattern and fill with color
+const imageDataToCanvas = (imageData) => {
+  const patternCanvas = document.createElement("canvas");
+  patternCanvas.width = imageData.width;
+  patternCanvas.height = imageData.height;
+
+  const patternContext = patternCanvas.getContext("2d");
   patternContext.putImageData(imageData, 0, 0);
 
-  // return patternCanvas.toDataURL()
+  return patternCanvas;
+};
 
-
+// Helper function to create canvas with a pattern
+export const createSizedCanvas = (patternCanvas, width = 300, height = 300) => {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
-  canvas.width = 600;
-  canvas.height = 600;
+  canvas.width = width;
+  canvas.height = height;
   const pattern = ctx.createPattern(patternCanvas, "repeat");
   ctx.fillStyle = pattern;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
+  return canvas;
+};
+// Helper function to convert canvas to a data URL
+export const canvasToDataURL = (canvas) => {
+  return canvas.toDataURL();
+};
 
-  return canvas.toDataURL()
+// Helper function to convert a 3D array of RGB values to a data URL
+export const arrayToDataURL = (imageArray) => {
+  const imageData = arrayToImageData(imageArray);
+  const patternCanvas = imageDataToCanvas(imageData);
+  const fullSizePatternCanvas = createSizedCanvas(patternCanvas);
+  return canvasToDataURL(fullSizePatternCanvas);
+};
+// Helper function to convert a 3D array of RGB values to a data URL
+export const rgbArrayToPatternCanvas = (rgbArray) => {
+  const imageData = arrayToImageData(rgbArray);
+  return imageDataToCanvas(imageData);
 };
 
 

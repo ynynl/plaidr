@@ -1,7 +1,8 @@
 import React from "react";
 
-const ImageUploader = ({ setImage, handleNewRgbArray }) => {
+const ImageUploader = ({ setImage, handleNewRgbArray, startUploading }) => {
   const handleImageUpload = (event) => {
+    startUploading()
     const uploadedImage = event.target.files[0];
     if (!uploadedImage.type.includes("image")) {
       alert("Please upload an image file.");

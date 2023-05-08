@@ -13,52 +13,11 @@ export const ColorPicker = ({ numOfColor, handleNewNumOfColor }) => {
         type="range"
         id="numOfColor"
         name="numOfColor"
-        min="3"
-        max="20"
+        min="2"
+        max="30"
         value={numOfColor}
         onChange={handleNumOfColorChange}
       />
-    </div>
-  );
-};
-
-export const GenerateButtons = ({
-  pivots,
-  getNewPivots,
-  colors,
-  getNewColors,
-  setPivotsAndColors,
-}) => {
-  const handleNewColor = () =>
-    setPivotsAndColors({
-      pivots,
-      colors: getNewColors(),
-    });
-
-  const handleNewPivots = () =>
-    setPivotsAndColors({
-      colors,
-      pivots: getNewPivots(),
-    });
-
-  const handleNewPivotsAndColor = () =>
-    setPivotsAndColors({
-      colors: getNewColors(),
-      pivots: getNewPivots(),
-    });
-  return (
-    <div style={{ display: "flex" }}>
-      <div>
-        <button onClick={handleNewPivots}>Generate New Pivots</button>
-      </div>
-      <div>
-        <button onClick={handleNewColor}>Generate New Colors</button>
-      </div>
-      <div>
-        <button onClick={handleNewPivotsAndColor}>
-          Generate New Pivots and Colors
-        </button>
-      </div>
     </div>
   );
 };
@@ -104,20 +63,20 @@ export const TwillPicker = ({ twill, setTwill }) => {
 
 export const SizePicker = ({ size, setSize }) => {
   const handleSizeChange = (event) => {
-    setSize(Number(event.target.value));
+    const newSize = Math.pow(2, Number(event.target.value));
+    setSize(newSize);
   };
 
   return (
     <div>
-      <label htmlFor="size">Size: {size} </label>
+      <label htmlFor="size">Size {Math.log2(size)} </label>
       <input
         type="range"
         id="size"
         name="size"
-        min={64}
-        max={512}
-        step={64}
-        value={size}
+        min={3}
+        max={8}
+        value={Math.log2(size)}
         onChange={handleSizeChange}
       />
     </div>
