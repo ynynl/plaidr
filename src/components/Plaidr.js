@@ -39,19 +39,31 @@ const Plaidr = () => {
     setIsLoading(false)
   }, [getNewColors, getNewPivots, numOfColor, plaidSettings]);
 
-  const handleNewNumOfColor = useCallback((newNumOfColor) => {
-    setNumOfColor(newNumOfColor);
+  const handleNewNumOfColor = useCallback((newNumOfColor, numOfColor) => {
+    let newPivots, newColors
+    const numToRemove = Math.abs(newNumOfColor - numOfColor)
+    if (newNumOfColor > numOfColor) {
+      newPivots = plaidSettings.pivots.concat(getRandomPivots(numToRemove));
+      newColors = plaidSettings.colors.concat(getNewColors(numToRemove));
+    }
+    else {
+      newPivots = plaidSettings.pivots.slice(0, -numToRemove)
+      newColors = plaidSettings.colors.slice(0, -numToRemove)
+    }
+    console.log(newPivots.length);
+    console.log(newColors.length);
     setPlaidSettings({
       ...plaidSettings,
-      pivots: getNewPivots(newNumOfColor),
-      colors: getNewColors(newNumOfColor),
+      pivots: newPivots,
+      colors: newColors,
     });
+    setNumOfColor(newNumOfColor);
   }, [getNewColors, getNewPivots, plaidSettings]);
 
 
   // We need to check if plaidSettings is a valid object before generating plaidImageCanvas
   const plaidImageCanvas = useMemo(() => {
-    if (!plaidSettings.colors.length) {
+    if (!plaidSettings.colors.length || !plaidSettings.pivots.length) {
       return null; // If plaidSettings is not valid, return null
     }
     const plaidArrary = generatePlaid(plaidSettings);
@@ -85,8 +97,11 @@ const Plaidr = () => {
           setSize={(size) => setPlaidSettings({ ...plaidSettings, size })}
         />
         <ColorPicker
-          numOfColor={numOfColor}
-          handleNewNumOfColor={handleNewNumOfColor}
+          numOfColor={numOfColor} 
+          setNumOfColor={setNumOfColor}
+          getNewColors={getNewColors}
+          plaidSettings={plaidSettings}
+          setPlaidSettings={setPlaidSettings}
         />
         <GenerateButtons
           getNewPivots={getNewPivots}

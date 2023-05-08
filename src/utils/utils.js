@@ -1,9 +1,15 @@
+export function getRandomPair() {
+  const pair = [Math.random(), Math.random()];
+  return pair.sort();
+}
+
+export function sortPairsByDistance(randomPairs) {
+  return randomPairs.sort((a, b) => Math.abs(b[0] - b[1]) - Math.abs(a[0] - a[1]));
+}
+
 export function getRandomPivots(length) {
-  const randomN2 = Array.from({ length }, () => {
-    const pair = [Math.random(), Math.random()];
-    return pair.sort();
-  });
-  return randomN2.sort((a, b) => Math.abs(b[0] - b[1]) - Math.abs(a[0] - a[1]));
+  const randomN2 = Array.from({ length }, getRandomPair);
+  return sortPairsByDistance(randomN2);
 }
 
 // Helper function to get random items from an array

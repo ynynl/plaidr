@@ -1,20 +1,38 @@
 import React from "react";
+import { getRandomPivots, sortPairsByDistance } from "../utils/utils";
 
-export const ColorPicker = ({ numOfColor, handleNewNumOfColor }) => {
+export const ColorPicker = ({ numOfColor, setNumOfColor, plaidSettings, setPlaidSettings, getNewColors }) => {
+
   const handleNumOfColorChange = (event) => {
     const newNumOfColor = event.target.value;
-    handleNewNumOfColor(newNumOfColor);
+    let newPivots, newColors
+    const numToChange = newNumOfColor - numOfColor
+    if (newNumOfColor > numOfColor) {
+      newPivots = sortPairsByDistance(plaidSettings.pivots.concat(getRandomPivots(numToChange)));
+      newColors = plaidSettings.colors.concat(getNewColors(numToChange));
+    }
+    else {
+      newPivots = [...plaidSettings.pivots].slice(0, numToChange)
+      newColors = [...plaidSettings.colors].slice(0, numToChange)
+    }
+    setPlaidSettings({
+      ...plaidSettings,
+      pivots: newPivots,
+      colors: newColors,
+    });
+    setNumOfColor(Number(newNumOfColor));
+
   };
 
   return (
     <div>
-      <label htmlFor="numOfColor">Number of Colors:</label>
+      <label htmlFor="numOfColor">Bands: {numOfColor} </label>
       <input
         type="range"
         id="numOfColor"
         name="numOfColor"
-        min="2"
-        max="30"
+        min={2}
+        max={30}
         value={numOfColor}
         onChange={handleNumOfColorChange}
       />
@@ -69,7 +87,7 @@ export const SizePicker = ({ size, setSize }) => {
 
   return (
     <div>
-      <label htmlFor="size">Size {Math.log2(size)} </label>
+      <label htmlFor="size">Pattern Size {size} </label>
       <input
         type="range"
         id="size"
