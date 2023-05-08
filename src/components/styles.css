@@ -1,6 +1,6 @@
 @media screen and (max-width: 600px) {
     .container {
-        width: 100%;
+        width: 80%;
     }
 }
 
@@ -9,10 +9,18 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 80%;
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     gap: 16px;
+}
+
+.inner-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 312px;
 }
 
 .preview {
@@ -29,6 +37,12 @@
 
 .full-screen-overlay-image {
     position: absolute;
+    z-index: 2;
+}
+
+.full-screen-overlay-image__full-size {
+    position: relative;
+    max-width: 80%;
 }
 
 .full-screen-overlay {
@@ -38,19 +52,46 @@
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
 }
 
 .spinner {
     display: inline-block;
-    border: 2px solid #f3f3f3; /* light gray border */
-    border-radius: 50%; /* makes square div into a circle */
-    border-top: 2px solid #3498db; /* blue border */
+    border: 2px solid #f3f3f3;
+    /* light gray border */
+    border-radius: 50%;
+    /* makes square div into a circle */
+    border-top: 2px solid #3498db;
+    /* blue border */
     width: 30px;
     height: 30px;
-    animation: spin 2s linear infinite; /* rotate the spinner continuously */
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    animation: spin 2s linear infinite;
+    /* rotate the spinner continuously */
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.drag-drop-container {
+    max-width: 300px;
+    min-height: 235px;
+    border: 2px dashed black;
+    padding: 25px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    margin: 10px;
   }

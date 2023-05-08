@@ -10,6 +10,9 @@ import GenerateButtons from "./GenerateButtons";
 import ImageUploader from "./ImageUploader";
 import './styles.css';
 
+import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
+
 const Plaidr = () => {
   const [image, setImage] = useState(null);
   const [imageArray, setImageArray] = useState([]);
@@ -21,7 +24,9 @@ const Plaidr = () => {
   });
   const [numOfColor, setNumOfColor] = useState(5);
   const [showOverlay, setShowOverlay] = useState(false); // new state variable
+  const [showFullSizeImage, setShowFullSizeImage] = useState(false); // new state variable
   const [isLoading, setIsLoading] = useState(false);
+  const [tabIndex, setTabIndex] = useState(0);
 
   const getNewPivots = useCallback((currNumOfColor = numOfColor) =>
     getRandomPivots(currNumOfColor - 1), [numOfColor]);
@@ -39,28 +44,6 @@ const Plaidr = () => {
     setIsLoading(false)
   }, [getNewColors, getNewPivots, numOfColor, plaidSettings]);
 
-  const handleNewNumOfColor = useCallback((newNumOfColor, numOfColor) => {
-    let newPivots, newColors
-    const numToRemove = Math.abs(newNumOfColor - numOfColor)
-    if (newNumOfColor > numOfColor) {
-      newPivots = plaidSettings.pivots.concat(getRandomPivots(numToRemove));
-      newColors = plaidSettings.colors.concat(getNewColors(numToRemove));
-    }
-    else {
-      newPivots = plaidSettings.pivots.slice(0, -numToRemove)
-      newColors = plaidSettings.colors.slice(0, -numToRemove)
-    }
-    console.log(newPivots.length);
-    console.log(newColors.length);
-    setPlaidSettings({
-      ...plaidSettings,
-      pivots: newPivots,
-      colors: newColors,
-    });
-    setNumOfColor(newNumOfColor);
-  }, [getNewColors, getNewPivots, plaidSettings]);
-
-
   // We need to check if plaidSettings is a valid object before generating plaidImageCanvas
   const plaidImageCanvas = useMemo(() => {
     if (!plaidSettings.colors.length || !plaidSettings.pivots.length) {
@@ -74,70 +57,92 @@ const Plaidr = () => {
 
 
   return (
-    <>
+    <div className="container">
+
       {showOverlay && <div
         className="full-screen-overlay"
         onClick={() => setShowOverlay(false)}
         style={{
           backgroundImage: `url(${plaidImageCanvas.toDataURL()})`,
-        }} />}
+        }} ></div>}
+      <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
 
-      <div className="container">
-        <ImageUploader
-          startUploading={() => setIsLoading(true)}
-          setImage={setImage}
-          handleNewRgbArray={handleNewRgbArray}
-        />
-        <TwillPicker
-          twill={plaidSettings.twill}
-          setTwill={(twill) => setPlaidSettings({ ...plaidSettings, twill })}
-        />
-        <SizePicker
-          size={plaidSettings.size}
-          setSize={(size) => setPlaidSettings({ ...plaidSettings, size })}
-        />
-        <ColorPicker
-          numOfColor={numOfColor} 
-          setNumOfColor={setNumOfColor}
-          getNewColors={getNewColors}
-          plaidSettings={plaidSettings}
-          setPlaidSettings={setPlaidSettings}
-        />
-        <GenerateButtons
-          getNewPivots={getNewPivots}
-          getNewColors={getNewColors}
-          setPivotsAndColors={(pivotsAndColors) =>
-            setPlaidSettings({ ...plaidSettings, ...pivotsAndColors })
-          }
-        />
-        {isLoading ? (
-          <div className="spinner" />
-        ) : (
-          <div>
-            {showOverlay && <img
-              src={image}
-              alt="preview"
-              className="preview full-screen-overlay-image"
-              onClick={() => setShowOverlay(false)}
-            />}
-
-            {!!image && <img
-              src={image}
-              alt="preview"
-              className="preview"
-            />}
+        <TabList>
+          <Tab>Upload Image</Tab>
+          <Tab disabled={!image}>Image Preview</Tab>
+          <Tab disabled={!plaidSettings.colors.length}>Plaid Settings</Tab>
+        </TabList>
+        <TabPanel>
+          <div className="inner-container">
+            <ImageUploader
+              startUploading={() => setIsLoading(true)}
+              setImage={setImage}
+              handleNewRgbArray={handleNewRgbArray}
+              showPreview={() => setTabIndex(1)}
+            />
           </div>
-        )}
+        </TabPanel>
 
-        {!!plaidPreview && <img
-          src={plaidPreview}
-          alt="preview"
-          className="preview"
-          onClick={() => setShowOverlay(true)}
-        />}
-      </div>
+        <TabPanel>
+          <div className="inner-container">
+            {isLoading ? (
+              <div className="spinner" />
+            ) : (
+              <div>
+                {showOverlay && <img
+                  src={image}
+                  alt="preview"
+                  className="full-screen-overlay-image preview"
+                  onClick={() => setShowFullSizeImage(!showFullSizeImage)}
+                />}
 
-    </>
+                {!!image && <img
+                  src={image}
+                  alt="preview"
+                  className="preview"
+                />}
+              </div>
+            )}
+          </div>
+        </TabPanel>
+        <TabPanel>
+          <div className="inner-container">
+            <div>
+              <TwillPicker
+                twill={plaidSettings.twill}
+                setTwill={(twill) => setPlaidSettings({ ...plaidSettings, twill })}
+              />
+              <SizePicker
+                size={plaidSettings.size}
+                setSize={(size) => setPlaidSettings({ ...plaidSettings, size })}
+              />
+              <ColorPicker
+                numOfColor={numOfColor}
+                setNumOfColor={setNumOfColor}
+                getNewColors={getNewColors}
+                plaidSettings={plaidSettings}
+                setPlaidSettings={setPlaidSettings}
+              />
+              <GenerateButtons
+                getNewPivots={getNewPivots}
+                getNewColors={getNewColors}
+                setPivotsAndColors={(pivotsAndColors) =>
+                  setPlaidSettings({ ...plaidSettings, ...pivotsAndColors })
+                }
+              />
+            </div>
+          </div>
+        </TabPanel>
+      </Tabs >
+
+
+      {!!plaidPreview && <img
+        src={plaidPreview}
+        alt="preview"
+        className="preview"
+        onClick={() => setShowOverlay(true)}
+      />}
+    </div >
   );
 };
 

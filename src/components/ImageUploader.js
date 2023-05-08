@@ -1,7 +1,8 @@
 import React from "react";
 import { useDropzone } from "react-dropzone";
+import './styles.css';
 
-const ImageUploader = ({ setImage, handleNewRgbArray, startUploading }) => {
+const ImageUploader = ({ setImage, handleNewRgbArray, startUploading, showPreview }) => {
   const onDrop = (acceptedFiles) => {
     // Handle dropped files here
     startUploading()
@@ -39,6 +40,7 @@ const ImageUploader = ({ setImage, handleNewRgbArray, startUploading }) => {
         newRgbArray.push([r, g, b]);
       }
       handleNewRgbArray(newRgbArray);
+      showPreview()
     };
   };
 
@@ -48,25 +50,17 @@ const ImageUploader = ({ setImage, handleNewRgbArray, startUploading }) => {
 
     <div
       {...getRootProps()}
-      style={{
-        width: "100%",
-        height: "100%",
-        border: "2px dashed black",
-        padding: "25px",
-        textAlign: "center",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: "12px",
-        cursor:'pointer'
-      }}
+      className="drag-drop-container"
     >
       <input {...getInputProps()} type="file" accept="image/*" />
-      <p>Drag 'n' drop image files here, or click to select files</p>
+      <p><strong>Drag 'n' drop</strong> image files here,
+        <strong>click</strong> to select a image,</p>
+      <p>
+        or <strong>try one of the following</strong> </p>
       <div
         {...getRootProps({
           onClick: (event) => event.stopPropagation(),
-        })} style={{ display: "flex", gap: "8px" }}>
+        })} style={{ display: "flex", gap: "12px" }}>
         <ExampleImage
           src={"/images/sample-1.jpeg"}
           handleImage={handleImage}
