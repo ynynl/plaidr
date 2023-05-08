@@ -19,16 +19,16 @@ const GenerateButtons = ({
         pivots: getNewPivots(),
       });
     return (
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "flex", gap: 4 }}>
         <div>
-          <button onClick={handleNewPivots}>Generate New Pivots</button>
+          <button onClick={handleNewPivots}>Shuffle Pattern</button>
         </div>
         <div>
-          <button onClick={handleNewColor}>Generate New Colors</button>
+          <button onClick={handleNewColor}>Shuffle Color</button>
         </div>
         <div>
           <button onClick={handleNewPivotsAndColor}>
-            Generate New Pivots and Colors
+            Shuffle Both
           </button>
         </div>
       </div>
