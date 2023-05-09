@@ -1,18 +1,18 @@
-@media screen and (max-width: 600px) {
-    .container {
-        width: 80%;
-    }
-}
-
 .container {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    width: 80%;
     max-width: 1200px;
     margin: 0 auto;
     gap: 16px;
+}
+
+@media screen and (max-width: 600px) {
+    .container {
+        width: 100%;
+    }
 }
 
 .inner-container {
@@ -21,11 +21,10 @@
     justify-content: center;
     align-items: center;
     min-height: 312px;
+    gap: 8px;
 }
 
 .preview {
-    width: 300px;
-    height: 300px;
     object-fit: cover;
     cursor: pointer;
 }
@@ -52,10 +51,6 @@
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     z-index: 1;
 }
 
@@ -94,4 +89,25 @@
     align-items: center;
     cursor: pointer;
     margin: 10px;
-  }
+}
+
+
+.preview-plaid {
+    object-fit: contain;
+    width: fit-content;
+    max-width: 100%;
+}
+
+.liked-plaid {
+    margin: 10px;
+    border: 1px solid black;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.liked-plaids {
+    margin-top: 24px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}

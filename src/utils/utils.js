@@ -1,3 +1,5 @@
+import generatePlaid from "./plaid";
+
 export function getRandomPair() {
   const pair = [Math.random(), Math.random()];
   return pair.sort();
@@ -76,6 +78,24 @@ export const arrayToDataURL = (imageArray) => {
 export const rgbArrayToPatternCanvas = (rgbArray) => {
   const imageData = arrayToImageData(rgbArray);
   return imageDataToCanvas(imageData);
+};
+
+export const generatePlaidImageCanvas = (plaidSettings) => {
+  if (!plaidSettings.colors.length || !plaidSettings.pivots.length) {
+    return null; // If plaidSettings is not valid, return null
+  }
+  const plaidArray = generatePlaid(plaidSettings);
+  return rgbArrayToPatternCanvas(plaidArray);
+}
+
+export const canvasToImgSrc = (plaidImageCanvas, plaidWidth, plaidHeight) => {
+  const canvas = plaidImageCanvas && createSizedCanvas(plaidImageCanvas, plaidWidth, plaidHeight)
+  return canvas.toDataURL();
+};
+
+export const generateThumbNailImgSrc = (plaidSetting) => {
+  const plaidImageCanvas = generatePlaidImageCanvas(plaidSetting)
+  return canvasToImgSrc(plaidImageCanvas, 50, 50)
 };
 
 

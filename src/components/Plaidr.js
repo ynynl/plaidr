@@ -2,13 +2,20 @@ import React, { useState, useMemo, useCallback } from "react";
 import generatePlaid from "../utils/plaid";
 import {
   rgbArrayToPatternCanvas,
+  createSizedCanvas,
+
+
+  canvasToImgSrc,
   getRandomItems,
   getRandomPivots,
-  createSizedCanvas,
+  generatePlaidImageCanvas,
+  generateThumbNailImgSrc
 } from "../utils/utils";
 import { ColorPicker, TwillPicker, SizePicker } from "./Picker";
 import GenerateButtons from "./GenerateButtons";
 import ImageUploader from "./ImageUploader";
+import PreviewSizeInput from "./PreviewSizeInput";
+import LikedPlaids from "./LikedPlaids";
 import "./styles.css";
 
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
@@ -24,49 +31,15 @@ const ImagePreviewTab = ({ image, isLoading, setShowOverlay, showOverlay }) => {
           {showOverlay && (
             <img
               src={image}
-              alt="preview"
-              className="full-screen-overlay-image preview"
+              alt="image preview"
+              className="image-container full-screen-overlay-image preview preview-square"
               onClick={() => setShowOverlay(false)}
             />
           )}
 
-          {!!image && <img src={image} alt="preview" className="preview" />}
+          {!!image && <img src={image} alt="preview" className="image-container preview" />}
         </div>
       )}
-    </div>
-  );
-};
-
-const PlaidSettingsTab = ({
-  twill,
-  size,
-  numOfColor,
-  setNumOfColor,
-  getNewColors,
-  setPlaidSettings,
-}) => {
-  return (
-    <div className="inner-container">
-      <div>
-        <TwillPicker
-          twill={twill}
-          setTwill={(twill) =>
-            setPlaidSettings((plaidSettings) => ({ ...plaidSettings, twill }))
-          }
-        />
-        <SizePicker
-          size={size}
-          setSize={(size) =>
-            setPlaidSettings((plaidSettings) => ({ ...plaidSettings, size }))
-          }
-        />
-        <ColorPicker
-          numOfColor={numOfColor}
-          setNumOfColor={setNumOfColor}
-          getNewColors={getNewColors}
-          setPlaidSettings={setPlaidSettings}
-        />
-      </div>
     </div>
   );
 };
@@ -84,6 +57,9 @@ const Plaidr = () => {
   const [showOverlay, setShowOverlay] = useState(false); // new state variable
   const [isLoading, setIsLoading] = useState(false);
   const [tabIndex, setTabIndex] = useState(0);
+  const [plaidWidth, setPlaidWidth] = useState(300);
+  const [plaidHeight, setPlaidHeight] = useState(300);
+  const [likedPlaids, setLikedPlaids] = useState([]);
 
   const getNewPivots = useCallback(
     (currNumOfColor = numOfColor) => getRandomPivots(currNumOfColor - 1),
@@ -109,7 +85,12 @@ const Plaidr = () => {
     [getNewColors, getNewPivots, numOfColor]
   );
 
-  // We need to check if plaidSettings is a valid object before generating plaidImageCanvas
+  // // We need to check if plaidSettings is a valid object before generating plaidImageCanvas
+  // const plaidImageCanvas = useMemo(() => generatePlaidImageCanvas(plaidSettings), [plaidSettings]);
+
+  // const plaidPreview = useMemo(() => generateImgSrc(plaidSettings)
+  // [plaidImageCanvas, plaidWidth, plaidHeight]);
+
   const plaidImageCanvas = useMemo(() => {
     if (!plaidSettings.colors.length || !plaidSettings.pivots.length) {
       return null; // If plaidSettings is not valid, return null
@@ -122,6 +103,15 @@ const Plaidr = () => {
     () => plaidImageCanvas && createSizedCanvas(plaidImageCanvas).toDataURL(),
     [plaidImageCanvas]
   );
+
+  const handleLike = useCallback(() => {
+    setLikedPlaids([...likedPlaids, {
+      ...plaidSettings,
+      src: generateThumbNailImgSrc(plaidSettings)
+    }]);
+    localStorage.setItem("likedPlaids", JSON.stringify([...likedPlaids, plaidSettings]));
+  }, [likedPlaids, plaidSettings]);
+
 
   return (
     <div className="container">
@@ -163,36 +153,59 @@ const Plaidr = () => {
         </TabPanel>
 
         <TabPanel>
-          <PlaidSettingsTab
-            twill={plaidSettings.twill}
-            size={plaidSettings.size}
-            numOfColor={numOfColor}
-            setNumOfColor={setNumOfColor}
-            getNewColors={getNewColors}
-            setPlaidSettings={setPlaidSettings}
-            getNewPivots={getNewPivots}
-          />
+          <div className="inner-container">
+            <div>
+              <TwillPicker
+                twill={plaidSettings.twill}
+                setTwill={(twill) =>
+                  setPlaidSettings((plaidSettings) => ({ ...plaidSettings, twill }))
+                }
+              />
+              <SizePicker
+                size={plaidSettings.size}
+                setSize={(size) =>
+                  setPlaidSettings((plaidSettings) => ({ ...plaidSettings, size }))
+                }
+              />
+              <ColorPicker
+                numOfColor={numOfColor}
+                setNumOfColor={setNumOfColor}
+                getNewColors={getNewColors}
+                setPlaidSettings={setPlaidSettings}
+              />
+              <PreviewSizeInput
+                plaidWidth={plaidWidth}
+                plaidHeight={plaidHeight}
+                setPlaidWidth={setPlaidWidth}
+                setPlaidHeight={setPlaidHeight}
+              />
+            </div>
+          </div>
         </TabPanel>
       </Tabs>
 
-      {!!plaidPreview && (
-        <img
-          src={plaidPreview}
-          alt="preview"
-          className="preview"
-          onClick={() => setShowOverlay(true)}
-        />
-      )}
 
       {!!plaidPreview && (
-        <GenerateButtons
-          getNewPivots={getNewPivots}
-          getNewColors={getNewColors}
-          setPivotsAndColors={(pivotsAndColors) =>
-            setPlaidSettings({ ...plaidSettings, ...pivotsAndColors })
-          }
-        />
+        <div className="inner-container">
+          <img
+            src={plaidPreview}
+            alt="preview"
+            className="preview-plaid"
+            onClick={() => setShowOverlay(true)}
+            width="100%"
+          />
+          <GenerateButtons
+            getNewPivots={getNewPivots}
+            getNewColors={getNewColors}
+            setPivotsAndColors={(pivotsAndColors) =>
+              setPlaidSettings({ ...plaidSettings, ...pivotsAndColors })
+            }
+            onLike={handleLike}
+          />
+        </div>
       )}
+
+      <LikedPlaids likedPlaids={likedPlaids} setLikedPlaids={setLikedPlaids} />
     </div>
   );
 };
