@@ -52,26 +52,26 @@ const ImageUploader = ({
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   return (
-    <div {...getRootProps()} className="drag-drop-container">
-      <input {...getInputProps()} type="file" accept="image/*" />
-      <p>
-        <strong>Drag 'n' drop</strong> image files here,
-        <strong>click</strong> to select a image,
-      </p>
-      <p>
-        or <strong>try one of the following</strong>{" "}
-      </p>
-      <div
-        {...getRootProps({
-          onClick: (event) => event.stopPropagation(),
-        })}
-        style={{ display: "flex", gap: "12px" }}
-      >
-        <ExampleImage src={"/images/sample-1.jpeg"} handleImage={handleImage} />
-        <ExampleImage src={"/images/sample-2.jpeg"} handleImage={handleImage} />
-        <ExampleImage src={"/images/sample-3.jpeg"} handleImage={handleImage} />
+      <div {...getRootProps()} className="drag-drop-container shadow-box">
+        {/* <input {...getInputProps()} type="file" accept="image/*" /> */}
+        <p>
+          <strong>Drag 'n' drop</strong> image files here,
+          <strong>click</strong> to select a image,
+        </p>
+        <p>
+          or <strong>try one of the following</strong>
+        </p>
+        <div
+          {...getRootProps({
+            onClick: (event) => event.stopPropagation(),
+          })}
+          style={{ display: "flex", gap: "12px" }}
+        >
+          <ExampleImage src={"/images/sample-1.jpeg"} handleImage={handleImage} />
+          <ExampleImage src={"/images/sample-2.jpeg"} handleImage={handleImage} />
+          <ExampleImage src={"/images/sample-3.jpeg"} handleImage={handleImage} />
+        </div>
       </div>
-    </div>
   );
 };
 

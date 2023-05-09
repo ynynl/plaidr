@@ -52,7 +52,7 @@ const imageDataToCanvas = (imageData) => {
 };
 
 // Helper function to create canvas with a pattern
-export const createSizedCanvas = (patternCanvas, width = 300, height = 300) => {
+export const createSizedCanvas = (patternCanvas, width = 300, height= 300) => {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
   canvas.width = width;
@@ -88,8 +88,8 @@ export const generatePlaidImageCanvas = (plaidSettings) => {
   return rgbArrayToPatternCanvas(plaidArray);
 }
 
-export const canvasToImgSrc = (plaidImageCanvas, plaidWidth, plaidHeight) => {
-  const canvas = plaidImageCanvas && createSizedCanvas(plaidImageCanvas, plaidWidth, plaidHeight)
+export const canvasToImgSrc = (plaidImageCanvas, plaidWidth = 300, plaidHeight = 300) => {
+  const canvas = createSizedCanvas(plaidImageCanvas, plaidWidth, plaidHeight)
   return canvas.toDataURL();
 };
 

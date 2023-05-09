@@ -1,3 +1,7 @@
+/* #f4d9cf albescent white*/
+/* #374465 pickled bluewood*/
+/* #F7A588 */
+
 .container {
     display: flex;
     flex-direction: column;
@@ -15,7 +19,7 @@
     }
 }
 
-.inner-container {
+.tab-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -29,22 +33,18 @@
     cursor: pointer;
 }
 
-.image-container {
+.preview__md {
     width: 300px;
     height: 300px;
 }
 
-.full-screen-overlay-image {
+.full_screen_overlay-image {
     position: absolute;
     z-index: 2;
 }
 
-.full-screen-overlay-image__full-size {
-    position: relative;
-    max-width: 80%;
-}
 
-.full-screen-overlay {
+.full_screen_overlay {
     width: 100vw;
     height: 100vh;
     background-repeat: repeat;
@@ -81,7 +81,6 @@
 .drag-drop-container {
     max-width: 247px;
     min-height: 235px;
-    border: 2px dashed black;
     padding: 25px;
     text-align: center;
     display: flex;
@@ -89,13 +88,36 @@
     align-items: center;
     cursor: pointer;
     margin: 10px;
+    font-size: 1rem;
+
 }
 
+.shadow-box {
+    background-color: #374465;
+    color: #F7A588;
+    box-shadow: 20px 20px 0px #F7A588;
+    border: 2px solid #F7A588;
+    margin-bottom: 20px;
+    margin-right: 20px;
+}
+
+
+.preview-container {
+    position: relative;
+}
 
 .preview-plaid {
     object-fit: contain;
     width: fit-content;
     max-width: 100%;
+    min-height: 300px;
+}
+
+.preview-like_btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 10px;
 }
 
 .liked-plaid {
@@ -110,4 +132,57 @@
     width: 100%;
     display: flex;
     flex-wrap: wrap;
+}
+
+.btn {
+    color: #374465;
+    background-color: #f4d9cf;
+    padding: 8px;
+    font-weight: bold;
+    border-color: #374465;
+    cursor: pointer;
+}
+
+
+.btn:hover {
+    background-color: #374465;
+    color: #F7A588;
+}
+
+
+.btn__primary {
+    background-color: #374465;
+    color: #f4d9cf;
+}
+
+.btn__primary:hover {
+    background-color: #374465;
+    color: #f4d9cf;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.input-label {
+    margin-right: 10px;
+}
+
+.input-field {
+    width: 70px;
+    border: 1px solid gray;
+    border-radius: 3px;
+    padding: 5px;
+}
+
+.row-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    /* add any additional styling here */
 }

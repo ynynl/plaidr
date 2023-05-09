@@ -1,11 +1,10 @@
 import React from "react";
-import "./GenerateButtons.css";
+import "./styles.css";
 
 const GenerateButtons = ({
   getNewPivots,
   getNewColors,
   setPivotsAndColors,
-  onLike
 }) => {
   const handleNewColor = () =>
     setPivotsAndColors({
@@ -35,7 +34,6 @@ const GenerateButtons = ({
       <button onClick={handleNewPivotsAndColor} className="btn">
         Shuffle Both
       </button>
-      <button onClick={onLike}>Like</button>
     </div>
   );
 };
