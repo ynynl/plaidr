@@ -1,11 +1,16 @@
 import React from "react";
 import { useDropzone } from "react-dropzone";
-import './styles.css';
+import "./styles.css";
 
-const ImageUploader = ({ setImage, handleNewRgbArray, startUploading, showPreview }) => {
+const ImageUploader = ({
+  setImage,
+  handleNewRgbArray,
+  startUploading,
+  showPreview,
+}) => {
   const onDrop = (acceptedFiles) => {
     // Handle dropped files here
-    startUploading()
+    startUploading();
     const uploadedImage = acceptedFiles[0];
     if (!uploadedImage.type.includes("image")) {
       alert("Please upload an image file.");
@@ -40,39 +45,31 @@ const ImageUploader = ({ setImage, handleNewRgbArray, startUploading, showPrevie
         newRgbArray.push([r, g, b]);
       }
       handleNewRgbArray(newRgbArray);
-      showPreview()
+      showPreview();
     };
   };
 
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   return (
-
-    <div
-      {...getRootProps()}
-      className="drag-drop-container"
-    >
+    <div {...getRootProps()} className="drag-drop-container">
       <input {...getInputProps()} type="file" accept="image/*" />
-      <p><strong>Drag 'n' drop</strong> image files here,
-        <strong>click</strong> to select a image,</p>
       <p>
-        or <strong>try one of the following</strong> </p>
+        <strong>Drag 'n' drop</strong> image files here,
+        <strong>click</strong> to select a image,
+      </p>
+      <p>
+        or <strong>try one of the following</strong>{" "}
+      </p>
       <div
         {...getRootProps({
           onClick: (event) => event.stopPropagation(),
-        })} style={{ display: "flex", gap: "12px" }}>
-        <ExampleImage
-          src={"/images/sample-1.jpeg"}
-          handleImage={handleImage}
-        />
-        <ExampleImage
-          src={"/images/sample-2.jpeg"}
-          handleImage={handleImage}
-        />
-        <ExampleImage
-          src={"/images/sample-3.jpeg"}
-          handleImage={handleImage}
-        />
+        })}
+        style={{ display: "flex", gap: "12px" }}
+      >
+        <ExampleImage src={"/images/sample-1.jpeg"} handleImage={handleImage} />
+        <ExampleImage src={"/images/sample-2.jpeg"} handleImage={handleImage} />
+        <ExampleImage src={"/images/sample-3.jpeg"} handleImage={handleImage} />
       </div>
     </div>
   );
@@ -84,7 +81,7 @@ const ExampleImage = ({ src, handleImage }) => {
   return (
     <img
       src={src}
-      alt="Example Image"
+      alt="Example"
       onClick={() => handleImage(src)}
       style={{ borderRadius: "50%", width: "36px", height: "36px" }}
     />

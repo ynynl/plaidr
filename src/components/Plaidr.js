@@ -38,7 +38,8 @@ const ImagePreviewTab = ({ image, isLoading, setShowOverlay, showOverlay }) => {
 };
 
 const PlaidSettingsTab = ({
-  plaidSettings,
+  twill,
+  size,
   numOfColor,
   setNumOfColor,
   getNewColors,
@@ -48,18 +49,21 @@ const PlaidSettingsTab = ({
     <div className="inner-container">
       <div>
         <TwillPicker
-          twill={plaidSettings.twill}
-          setTwill={(twill) => setPlaidSettings({ ...plaidSettings, twill })}
+          twill={twill}
+          setTwill={(twill) =>
+            setPlaidSettings((plaidSettings) => ({ ...plaidSettings, twill }))
+          }
         />
         <SizePicker
-          size={plaidSettings.size}
-          setSize={(size) => setPlaidSettings({ ...plaidSettings, size })}
+          size={size}
+          setSize={(size) =>
+            setPlaidSettings((plaidSettings) => ({ ...plaidSettings, size }))
+          }
         />
         <ColorPicker
           numOfColor={numOfColor}
           setNumOfColor={setNumOfColor}
           getNewColors={getNewColors}
-          plaidSettings={plaidSettings}
           setPlaidSettings={setPlaidSettings}
         />
       </div>
@@ -87,22 +91,22 @@ const Plaidr = () => {
   );
 
   const getNewColors = useCallback(
-    (currNumOfColor = numOfColor, cuurRgbArray = imageArray) =>
-      getRandomItems(cuurRgbArray, currNumOfColor),
+    (currNumOfColor = numOfColor, currRgbArray = imageArray) =>
+      getRandomItems(currRgbArray, currNumOfColor),
     [imageArray, numOfColor]
   );
 
   const handleNewRgbArray = useCallback(
     (newRgbArray) => {
       setImageArray(newRgbArray);
-      setPlaidSettings({
+      setPlaidSettings((plaidSettings) => ({
         ...plaidSettings,
         colors: getNewColors(numOfColor, newRgbArray),
         pivots: getNewPivots(),
-      });
+      }));
       setIsLoading(false);
     },
-    [getNewColors, getNewPivots, numOfColor, plaidSettings]
+    [getNewColors, getNewPivots, numOfColor]
   );
 
   // We need to check if plaidSettings is a valid object before generating plaidImageCanvas
@@ -110,8 +114,8 @@ const Plaidr = () => {
     if (!plaidSettings.colors.length || !plaidSettings.pivots.length) {
       return null; // If plaidSettings is not valid, return null
     }
-    const plaidArrary = generatePlaid(plaidSettings);
-    return rgbArrayToPatternCanvas(plaidArrary);
+    const plaidArray = generatePlaid(plaidSettings);
+    return rgbArrayToPatternCanvas(plaidArray);
   }, [plaidSettings]);
 
   const plaidPreview = useMemo(
@@ -160,7 +164,8 @@ const Plaidr = () => {
 
         <TabPanel>
           <PlaidSettingsTab
-            plaidSettings={plaidSettings}
+            twill={plaidSettings.twill}
+            size={plaidSettings.size}
             numOfColor={numOfColor}
             setNumOfColor={setNumOfColor}
             getNewColors={getNewColors}

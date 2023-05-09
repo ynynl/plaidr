@@ -1,32 +1,38 @@
 import React from "react";
 import { getRandomPivots, sortPairsByDistance } from "../utils/utils";
 
-export const ColorPicker = ({ numOfColor, setNumOfColor, plaidSettings, setPlaidSettings, getNewColors }) => {
-
+export const ColorPicker = ({
+  numOfColor,
+  setNumOfColor,
+  setPlaidSettings,
+  getNewColors,
+}) => {
   const handleNumOfColorChange = (event) => {
     const newNumOfColor = event.target.value;
-    let newPivots, newColors
-    const numToChange = newNumOfColor - numOfColor
-    if (newNumOfColor > numOfColor) {
-      newPivots = sortPairsByDistance(plaidSettings.pivots.concat(getRandomPivots(numToChange)));
-      newColors = plaidSettings.colors.concat(getNewColors(numToChange));
-    }
-    else {
-      newPivots = [...plaidSettings.pivots].slice(0, numToChange)
-      newColors = [...plaidSettings.colors].slice(0, numToChange)
-    }
-    setPlaidSettings({
-      ...plaidSettings,
-      pivots: newPivots,
-      colors: newColors,
+    const numToChange = newNumOfColor - numOfColor;
+    setPlaidSettings((plaidSettings) => {
+      let newPivots, newColors;
+      if (newNumOfColor > numOfColor) {
+        newPivots = sortPairsByDistance(
+          plaidSettings.pivots.concat(getRandomPivots(numToChange))
+        );
+        newColors = plaidSettings.colors.concat(getNewColors(numToChange));
+      } else {
+        newPivots = [...plaidSettings.pivots].slice(0, numToChange);
+        newColors = [...plaidSettings.colors].slice(0, numToChange);
+      }
+      return {
+        ...plaidSettings,
+        pivots: newPivots,
+        colors: newColors,
+      };
     });
     setNumOfColor(Number(newNumOfColor));
-
   };
 
   return (
     <div>
-      <label htmlFor="numOfColor">Bands: {numOfColor} </label>
+      <label htmlFor="numOfColor">Bands:</label>
       <input
         type="range"
         id="numOfColor"
@@ -87,7 +93,7 @@ export const SizePicker = ({ size, setSize }) => {
 
   return (
     <div>
-      <label htmlFor="size">Pattern Size {size} </label>
+      <label htmlFor="size">Pattern Size </label>
       <input
         type="range"
         id="size"
