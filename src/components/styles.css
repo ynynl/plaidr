@@ -10,7 +10,7 @@
     width: 80%;
     max-width: 1200px;
     margin: 0 auto;
-    gap: 16px;
+    gap: 24px;
 }
 
 @media screen and (max-width: 600px) {
@@ -24,21 +24,20 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 312px;
+    min-height: 331px;
     gap: 8px;
 }
 
 .preview {
     object-fit: cover;
-    cursor: pointer;
 }
 
-.preview__md {
+.preview--md {
     width: 300px;
     height: 300px;
 }
 
-.full_screen_overlay-image {
+.full-screen-overlay__image {
     position: absolute;
     z-index: 2;
 }
@@ -79,8 +78,8 @@
 }
 
 .drag-drop-container {
-    max-width: 247px;
-    min-height: 235px;
+    max-width: 246px;
+    min-height: 246px;
     padding: 25px;
     text-align: center;
     display: flex;
@@ -97,13 +96,14 @@
     color: #F7A588;
     box-shadow: 20px 20px 0px #F7A588;
     border: 2px solid #F7A588;
-    margin-bottom: 20px;
-    margin-right: 20px;
+    margin: 24px;
+
 }
 
 
 .preview-container {
     position: relative;
+    margin: 10px;
 }
 
 .preview-plaid {
@@ -111,9 +111,11 @@
     width: fit-content;
     max-width: 100%;
     min-height: 300px;
+    cursor: pointer;
+
 }
 
-.preview-like_btn {
+.preview-like__btn {
     position: absolute;
     bottom: 0;
     right: 0;
@@ -150,12 +152,12 @@
 }
 
 
-.btn__primary {
+.btn--primary {
     background-color: #374465;
     color: #f4d9cf;
 }
 
-.btn__primary:hover {
+.btn--primary:hover {
     background-color: #374465;
     color: #f4d9cf;
 }
@@ -172,10 +174,11 @@
 }
 
 .input-field {
-    width: 70px;
+    max-width: 40px;
     border: 1px solid gray;
     border-radius: 3px;
     padding: 5px;
+    margin-right: 10px;
 }
 
 .row-container {

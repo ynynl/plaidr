@@ -21,9 +21,6 @@ const PreviewSizeInput = ({ plaidWidth, plaidHeight, setPlaidWidth, setPlaidHeig
                     onChange={(e) => setNewPlaidWidth(Number(e.target.value))}
                     className="input-field"
                 />
-            </div>
-
-            <div className="input-container">
                 <label htmlFor="heightInput" className="input-label">Height:</label>
                 <input
                     id="heightInput"
@@ -32,9 +29,9 @@ const PreviewSizeInput = ({ plaidWidth, plaidHeight, setPlaidWidth, setPlaidHeig
                     onChange={(e) => setNewPlaidHeight(Number(e.target.value))}
                     className="input-field"
                 />
+                <button onClick={() => handleSubmit()} className="btn">Submit</button>
             </div>
 
-            <button onClick={() => handleSubmit()} className="btn">Submit</button>
         </div>
     );
 }

@@ -14,7 +14,7 @@ import LikedPlaids from "./LikedPlaids";
 import "./styles.css";
 
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
+import "./react-tabs.css";
 
 const ImagePreviewTab = ({ image, isLoading, setShowOverlay, showOverlay }) => {
   return (
@@ -26,13 +26,13 @@ const ImagePreviewTab = ({ image, isLoading, setShowOverlay, showOverlay }) => {
           {showOverlay && (
             <img
               src={image}
-              alt="image preview"
-              className="preview__md full_screen_overlay-image preview preview-square"
+              alt="upload preview"
+              className="preview--md full-screen-overlay__image preview preview-square"
               onClick={() => setShowOverlay(false)}
             />
           )}
 
-          {!!image && <img src={image} alt="preview" className="preview__md preview" />}
+          {!!image && <img src={image} alt="preview" className="preview--md preview" />}
         </div>
       )}
     </div>
@@ -84,8 +84,8 @@ const Plaidr = () => {
   const plaidImageCanvas = useMemo(() => generatePlaidImageCanvas(plaidSettings), [plaidSettings]);
 
   const plaidPreview = useMemo(
-    () => plaidImageCanvas && canvasToImgSrc(plaidImageCanvas),
-    [plaidImageCanvas]
+    () => plaidImageCanvas && canvasToImgSrc(plaidImageCanvas, plaidWidth, plaidHeight),
+    [plaidImageCanvas, plaidWidth, plaidHeight]
   );
 
   const handleLike = useCallback(() => {
@@ -110,24 +110,20 @@ const Plaidr = () => {
       )}
 
       <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
-        <TabList>
-          <Tab>Upload Image</Tab>
+        <TabList >
+          <Tab >Upload Image</Tab>
           <Tab disabled={!image}>Image Preview</Tab>
           <Tab disabled={!plaidSettings.colors.length}>Plaid Settings</Tab>
         </TabList>
 
         <div className="tab-container">
-
-
           <TabPanel>
-            <div className="tab-container">
-              <ImageUploader
-                startUploading={() => setIsLoading(true)}
-                setImage={setImage}
-                handleNewRgbArray={handleNewRgbArray}
-                showPreview={() => setTabIndex(1)}
-              />
-            </div>
+            <ImageUploader
+              startUploading={() => setIsLoading(true)}
+              setImage={setImage}
+              handleNewRgbArray={handleNewRgbArray}
+              showPreview={() => setTabIndex(1)}
+            />
           </TabPanel>
 
           <TabPanel>
@@ -140,42 +136,38 @@ const Plaidr = () => {
           </TabPanel>
 
           <TabPanel>
-            <div className="tab-container">
-              <div>
-                <TwillPicker
-                  twill={plaidSettings.twill}
-                  setTwill={(twill) =>
-                    setPlaidSettings((plaidSettings) => ({ ...plaidSettings, twill }))
-                  }
-                />
-                <SizePicker
-                  size={plaidSettings.size}
-                  setSize={(size) =>
-                    setPlaidSettings((plaidSettings) => ({ ...plaidSettings, size }))
-                  }
-                />
-                <ColorPicker
-                  numOfColor={numOfColor}
-                  setNumOfColor={setNumOfColor}
-                  getNewColors={getNewColors}
-                  setPlaidSettings={setPlaidSettings}
-                />
-                <PreviewSizeInput
-                  plaidWidth={plaidWidth}
-                  plaidHeight={plaidHeight}
-                  setPlaidWidth={setPlaidWidth}
-                  setPlaidHeight={setPlaidHeight}
-                />
-              </div>
-            </div>
+            <TwillPicker
+              twill={plaidSettings.twill}
+              setTwill={(twill) =>
+                setPlaidSettings((plaidSettings) => ({ ...plaidSettings, twill }))
+              }
+            />
+            <SizePicker
+              size={plaidSettings.size}
+              setSize={(size) =>
+                setPlaidSettings((plaidSettings) => ({ ...plaidSettings, size }))
+              }
+            />
+            <ColorPicker
+              numOfColor={numOfColor}
+              setNumOfColor={setNumOfColor}
+              getNewColors={getNewColors}
+              setPlaidSettings={setPlaidSettings}
+            />
+            <PreviewSizeInput
+              plaidWidth={plaidWidth}
+              plaidHeight={plaidHeight}
+              setPlaidWidth={setPlaidWidth}
+              setPlaidHeight={setPlaidHeight}
+            />
           </TabPanel>
         </div>
       </Tabs>
 
 
-      <div className="tab-container row-container"
+      <div className="tab-container"
         style={{ visibility: plaidPreview ? "visible" : "hidden" }}>
-        <div className="preview-container shadow-box">
+        <div className="preview-container shadow-box ">
           <img
             src={plaidPreview}
             alt="preview"
@@ -183,7 +175,7 @@ const Plaidr = () => {
             onClick={() => setShowOverlay(true)}
             width="100%"
           />
-          <button onClick={handleLike} className="btn btn__primary preview-like_btn">💜</button>
+          <button onClick={handleLike} className="btn btn--primary preview-like__btn">💜</button>
         </div>
         <GenerateButtons
           getNewPivots={getNewPivots}

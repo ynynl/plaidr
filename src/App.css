@@ -9,10 +9,23 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  /* font-size: calc(10px + 2vmin); */
   /* color: white; */
 }
 
-.App-link {
-  color: #61dafb;
+.App-header {
+  display: flex;
+  color: #F7A588;
+  gap: 12px;
+}
+
+.App-header h1 {
+  border: 8px solid #374465;
+  padding: 4px;
+  margin: 1px;
+}
+
+.App-header a {
+  color: #374465;
+  text-decoration: none;
 }

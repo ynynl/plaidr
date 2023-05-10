@@ -53,7 +53,7 @@ const ImageUploader = ({
 
   return (
       <div {...getRootProps()} className="drag-drop-container shadow-box">
-        {/* <input {...getInputProps()} type="file" accept="image/*" /> */}
+        <input {...getInputProps()} type="file" accept="image/*" />
         <p>
           <strong>Drag 'n' drop</strong> image files here,
           <strong>click</strong> to select a image,

@@ -88,7 +88,7 @@ export const generatePlaidImageCanvas = (plaidSettings) => {
   return rgbArrayToPatternCanvas(plaidArray);
 }
 
-export const canvasToImgSrc = (plaidImageCanvas, plaidWidth = 300, plaidHeight = 300) => {
+export const canvasToImgSrc = (plaidImageCanvas, plaidWidth, plaidHeight) => {
   const canvas = createSizedCanvas(plaidImageCanvas, plaidWidth, plaidHeight)
   return canvas.toDataURL();
 };

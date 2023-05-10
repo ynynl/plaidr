@@ -31,8 +31,8 @@ export const ColorPicker = ({
   };
 
   return (
-    <div>
-      <label htmlFor="numOfColor">Bands:</label>
+    <div className="input-container">
+      <label htmlFor="numOfColor" className="input-label">Bands:</label>
       <input
         type="range"
         id="numOfColor"
@@ -52,8 +52,8 @@ export const TwillPicker = ({ twill, setTwill }) => {
   };
 
   return (
-    <div>
-      <label htmlFor="twill">Twill:</label>
+    <div className="input-container">
+      <label htmlFor="twill" className="input-label">Twill:</label>
       <input
         type="radio"
         id="tartan"
@@ -61,8 +61,9 @@ export const TwillPicker = ({ twill, setTwill }) => {
         value="tartan"
         checked={twill === "tartan"}
         onChange={handleTwillChange}
+
       />
-      <label htmlFor="tartan">Tartan</label>
+      <label htmlFor="tartan" className="input-label">Tartan</label>
       <input
         type="radio"
         id="net"
@@ -70,8 +71,9 @@ export const TwillPicker = ({ twill, setTwill }) => {
         value="net"
         checked={twill === "net"}
         onChange={handleTwillChange}
+
       />
-      <label htmlFor="net">Net</label>
+      <label htmlFor="net" className="input-label">Net</label>
       <input
         type="radio"
         id="madras"
@@ -80,7 +82,7 @@ export const TwillPicker = ({ twill, setTwill }) => {
         checked={twill === "madras"}
         onChange={handleTwillChange}
       />
-      <label htmlFor="madras">Madras</label>
+      <label htmlFor="madras" className="input-label">Madras</label>
     </div>
   );
 };
@@ -92,8 +94,8 @@ export const SizePicker = ({ size, setSize }) => {
   };
 
   return (
-    <div>
-      <label htmlFor="size">Pattern Size </label>
+    <div className="input-container">
+      <label htmlFor="size" className="input-label">Pattern Size </label>
       <input
         type="range"
         id="size"
