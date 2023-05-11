@@ -4,7 +4,7 @@ import {
   getRandomPivots,
   generatePlaidImageCanvas,
   canvasToImgSrc,
-  generateThumbNailImgSrc
+  generateThumbNailImgSrc,
 } from "../utils/utils";
 import { ColorPicker, TwillPicker, SizePicker } from "./Picker";
 import GenerateButtons from "./GenerateButtons";
@@ -32,7 +32,9 @@ const ImagePreviewTab = ({ image, isLoading, setShowOverlay, showOverlay }) => {
             />
           )}
 
-          {!!image && <img src={image} alt="preview" className="preview--md preview" />}
+          {!!image && (
+            <img src={image} alt="preview" className="preview--md preview" />
+          )}
         </div>
       )}
     </div>
@@ -81,21 +83,31 @@ const Plaidr = () => {
   );
 
   // We need to check if plaidSettings is a valid object before generating plaidImageCanvas
-  const plaidImageCanvas = useMemo(() => generatePlaidImageCanvas(plaidSettings), [plaidSettings]);
+  const plaidImageCanvas = useMemo(
+    () => generatePlaidImageCanvas(plaidSettings),
+    [plaidSettings]
+  );
 
   const plaidPreview = useMemo(
-    () => plaidImageCanvas && canvasToImgSrc(plaidImageCanvas, plaidWidth, plaidHeight),
+    () =>
+      plaidImageCanvas &&
+      canvasToImgSrc(plaidImageCanvas, plaidWidth, plaidHeight),
     [plaidImageCanvas, plaidWidth, plaidHeight]
   );
 
   const handleLike = useCallback(() => {
-    setLikedPlaids([...likedPlaids, {
-      ...plaidSettings,
-      src: generateThumbNailImgSrc(plaidSettings)
-    }]);
-    localStorage.setItem("likedPlaids", JSON.stringify([...likedPlaids, plaidSettings]));
+    setLikedPlaids([
+      ...likedPlaids,
+      {
+        ...plaidSettings,
+        src: generateThumbNailImgSrc(plaidSettings),
+      },
+    ]);
+    localStorage.setItem(
+      "likedPlaids",
+      JSON.stringify([...likedPlaids, plaidSettings])
+    );
   }, [likedPlaids, plaidSettings]);
-
 
   return (
     <div className="container">
@@ -109,84 +121,109 @@ const Plaidr = () => {
         ></div>
       )}
 
-      <Tabs selectedIndex={tabIndex} onSelect={(index) => setTabIndex(index)}>
-        <TabList >
-          <Tab >Upload Image</Tab>
-          <Tab disabled={!image}>Image Preview</Tab>
-          <Tab disabled={!plaidSettings.colors.length}>Plaid Settings</Tab>
-        </TabList>
+      <div className="row-container">
+        <div className="row-item">
+          <Tabs
+            selectedIndex={tabIndex}
+            onSelect={(index) => setTabIndex(index)}
+          >
+            <TabList>
+              <Tab>Upload Image</Tab>
+              <Tab disabled={!image}>Image Preview</Tab>
+              <Tab disabled={!plaidSettings.colors.length}>Plaid Settings</Tab>
+            </TabList>
 
-        <div className="tab-container">
-          <TabPanel>
-            <ImageUploader
-              startUploading={() => setIsLoading(true)}
-              setImage={setImage}
-              handleNewRgbArray={handleNewRgbArray}
-              showPreview={() => setTabIndex(1)}
-            />
-          </TabPanel>
+            <div className="tab-container">
+              <TabPanel>
+                <ImageUploader
+                  startUploading={() => setIsLoading(true)}
+                  setImage={setImage}
+                  handleNewRgbArray={handleNewRgbArray}
+                  showPreview={() => setTabIndex(1)}
+                />
+              </TabPanel>
 
-          <TabPanel>
-            <ImagePreviewTab
-              image={image}
-              isLoading={isLoading}
-              setShowOverlay={setShowOverlay}
-              showOverlay={showOverlay}
-            />
-          </TabPanel>
+              <TabPanel>
+                <ImagePreviewTab
+                  image={image}
+                  isLoading={isLoading}
+                  setShowOverlay={setShowOverlay}
+                  showOverlay={showOverlay}
+                />
+              </TabPanel>
 
-          <TabPanel>
-            <TwillPicker
-              twill={plaidSettings.twill}
-              setTwill={(twill) =>
-                setPlaidSettings((plaidSettings) => ({ ...plaidSettings, twill }))
-              }
-            />
-            <SizePicker
-              size={plaidSettings.size}
-              setSize={(size) =>
-                setPlaidSettings((plaidSettings) => ({ ...plaidSettings, size }))
-              }
-            />
-            <ColorPicker
-              numOfColor={numOfColor}
-              setNumOfColor={setNumOfColor}
+              <TabPanel>
+                <div className="plaid-setting">
+                  <TwillPicker
+                    twill={plaidSettings.twill}
+                    setTwill={(twill) =>
+                      setPlaidSettings((plaidSettings) => ({
+                        ...plaidSettings,
+                        twill,
+                      }))
+                    }
+                  />
+                  <SizePicker
+                    size={plaidSettings.size}
+                    setSize={(size) =>
+                      setPlaidSettings((plaidSettings) => ({
+                        ...plaidSettings,
+                        size,
+                      }))
+                    }
+                  />
+                  <ColorPicker
+                    numOfColor={numOfColor}
+                    setNumOfColor={setNumOfColor}
+                    getNewColors={getNewColors}
+                    setPlaidSettings={setPlaidSettings}
+                  />
+                  <PreviewSizeInput
+                    plaidWidth={plaidWidth}
+                    plaidHeight={plaidHeight}
+                    setPlaidWidth={setPlaidWidth}
+                    setPlaidHeight={setPlaidHeight}
+                  />
+                </div>
+
+              </TabPanel>
+            </div>
+          </Tabs>
+          <div
+            className="tab-container"
+            style={{ visibility: plaidPreview ? "visible" : "hidden" }}
+          >
+            <div className="preview-container shadow-box ">
+              <img
+                src={plaidPreview}
+                alt="preview"
+                className="preview-plaid"
+                onClick={() => setShowOverlay(true)}
+                width="100%"
+              />
+              <button
+                onClick={handleLike}
+                className="btn btn--primary preview-like__btn"
+              >
+                💜
+              </button>
+            </div>
+            <GenerateButtons
+              getNewPivots={getNewPivots}
               getNewColors={getNewColors}
-              setPlaidSettings={setPlaidSettings}
+              setPivotsAndColors={(pivotsAndColors) =>
+                setPlaidSettings({ ...plaidSettings, ...pivotsAndColors })
+              }
             />
-            <PreviewSizeInput
-              plaidWidth={plaidWidth}
-              plaidHeight={plaidHeight}
-              setPlaidWidth={setPlaidWidth}
-              setPlaidHeight={setPlaidHeight}
-            />
-          </TabPanel>
+          </div>
         </div>
-      </Tabs>
-
-
-      <div className="tab-container"
-        style={{ visibility: plaidPreview ? "visible" : "hidden" }}>
-        <div className="preview-container shadow-box ">
-          <img
-            src={plaidPreview}
-            alt="preview"
-            className="preview-plaid"
-            onClick={() => setShowOverlay(true)}
-            width="100%"
+        <div className="row-item">
+          <LikedPlaids
+            likedPlaids={likedPlaids}
+            setLikedPlaids={setLikedPlaids}
           />
-          <button onClick={handleLike} className="btn btn--primary preview-like__btn">💜</button>
         </div>
-        <GenerateButtons
-          getNewPivots={getNewPivots}
-          getNewColors={getNewColors}
-          setPivotsAndColors={(pivotsAndColors) =>
-            setPlaidSettings({ ...plaidSettings, ...pivotsAndColors })
-          }
-        />
       </div>
-
-      <LikedPlaids likedPlaids={likedPlaids} setLikedPlaids={setLikedPlaids} />
     </div>
   );
 };

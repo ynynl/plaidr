@@ -19,6 +19,26 @@
     }
 }
 
+.row-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    min-height: 825px;
+    /* add any additional styling here */
+}
+
+.row-item {
+    width: 40%;
+}
+
+@media screen and (max-width: 1024px) {
+    .row-item {
+        width: 100%;
+    }
+}
+
 .tab-container {
     display: flex;
     flex-direction: column;
@@ -59,7 +79,7 @@
     /* light gray border */
     border-radius: 50%;
     /* makes square div into a circle */
-    border-top: 2px solid #3498db;
+    border-top: 2px solid #F7A588;
     /* blue border */
     width: 30px;
     height: 30px;
@@ -100,6 +120,13 @@
 
 }
 
+.plaid-setting {
+    display: flex;
+    flex-direction: column;
+    background-color: #F7A588;
+    padding: 8px;
+    margin-top: 48px;
+}
 
 .preview-container {
     position: relative;
@@ -122,6 +149,12 @@
     margin: 10px;
 }
 
+.preview-generate-btns {
+    display: flex;
+    margin-top: 36px;
+    gap: 8px;
+}
+
 .liked-plaid {
     margin: 10px;
     border: 1px solid black;
@@ -134,6 +167,8 @@
     width: 100%;
     display: flex;
     flex-wrap: wrap;
+    max-height: 667px;
+    overflow-y: scroll;
 }
 
 .btn {
@@ -154,12 +189,12 @@
 
 .btn--primary {
     background-color: #374465;
-    color: #f4d9cf;
+    color: #F7A588;
 }
 
 .btn--primary:hover {
     background-color: #374465;
-    color: #f4d9cf;
+    border-color: #F7A588;
 }
 
 .input-container {
@@ -170,7 +205,8 @@
 }
 
 .input-label {
-    margin-right: 10px;
+    margin-right: 12px;
+    font-weight: bold;
 }
 
 .input-field {
@@ -179,13 +215,4 @@
     border-radius: 3px;
     padding: 5px;
     margin-right: 10px;
-}
-
-.row-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    /* add any additional styling here */
 }

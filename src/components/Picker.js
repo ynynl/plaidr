@@ -63,7 +63,7 @@ export const TwillPicker = ({ twill, setTwill }) => {
         onChange={handleTwillChange}
 
       />
-      <label htmlFor="tartan" className="input-label">Tartan</label>
+      <label htmlFor="tartan">Tartan</label>
       <input
         type="radio"
         id="net"
@@ -73,7 +73,7 @@ export const TwillPicker = ({ twill, setTwill }) => {
         onChange={handleTwillChange}
 
       />
-      <label htmlFor="net" className="input-label">Net</label>
+      <label htmlFor="net" >Net</label>
       <input
         type="radio"
         id="madras"
@@ -82,7 +82,7 @@ export const TwillPicker = ({ twill, setTwill }) => {
         checked={twill === "madras"}
         onChange={handleTwillChange}
       />
-      <label htmlFor="madras" className="input-label">Madras</label>
+      <label htmlFor="madras" >Madras</label>
     </div>
   );
 };

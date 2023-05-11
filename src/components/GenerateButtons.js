@@ -24,7 +24,7 @@ const GenerateButtons = ({
     });
 
   return (
-    <div style={{ display: "flex", gap: 4 }}>
+    <div className="preview-generate-btns">
       <button onClick={handleNewPivots} className="btn">
         Shuffle Pattern
       </button>
