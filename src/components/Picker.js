@@ -6,6 +6,7 @@ export const ColorPicker = ({
   setNumOfColor,
   setPlaidSettings,
   getNewColors,
+  disabled
 }) => {
   const handleNumOfColorChange = (event) => {
     const newNumOfColor = event.target.value;
@@ -34,6 +35,7 @@ export const ColorPicker = ({
     <div className="input-container">
       <label htmlFor="numOfColor" className="input-label">Bands:</label>
       <input
+        disabled={disabled}
         type="range"
         id="numOfColor"
         name="numOfColor"

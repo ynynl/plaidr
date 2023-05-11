@@ -57,6 +57,13 @@ const Plaidr = () => {
   const [plaidWidth, setPlaidWidth] = useState(300);
   const [plaidHeight, setPlaidHeight] = useState(300);
   const [likedPlaids, setLikedPlaids] = useState([]);
+  const [nextId, setNextId] = useState(1);
+  const [liked, setLiked] = useState(false)
+
+  const onChangePlaidSettings = (plaidSettings) => {
+    setPlaidSettings(plaidSettings)
+    setLiked(false)
+  }
 
   const getNewPivots = useCallback(
     (currNumOfColor = numOfColor) => getRandomPivots(currNumOfColor - 1),
@@ -72,7 +79,7 @@ const Plaidr = () => {
   const handleNewRgbArray = useCallback(
     (newRgbArray) => {
       setImageArray(newRgbArray);
-      setPlaidSettings((plaidSettings) => ({
+      onChangePlaidSettings((plaidSettings) => ({
         ...plaidSettings,
         colors: getNewColors(numOfColor, newRgbArray),
         pivots: getNewPivots(),
@@ -97,17 +104,38 @@ const Plaidr = () => {
 
   const handleLike = useCallback(() => {
     setLikedPlaids([
-      ...likedPlaids,
       {
+        id: nextId,
         ...plaidSettings,
         src: generateThumbNailImgSrc(plaidSettings),
       },
+      ...likedPlaids,
     ]);
+    const storedLikedPlaidsInString = localStorage.getItem("likedPlaids");
+    const storedLikedPlaids = storedLikedPlaidsInString ? JSON.parse(storedLikedPlaidsInString) : []
     localStorage.setItem(
       "likedPlaids",
-      JSON.stringify([...likedPlaids, plaidSettings])
+      JSON.stringify([
+        {
+          id: nextId,
+          ...plaidSettings
+        },
+        ...storedLikedPlaids,
+      ])
     );
-  }, [likedPlaids, plaidSettings]);
+    localStorage.setItem("nextId", (nextId + 1).toString());
+    setNextId(nextId + 1);
+    setLiked(true)
+  }, [likedPlaids, plaidSettings, nextId]);
+
+
+  const handleSelectLiked = (seletedPlaid) => {
+    setPlaidSettings(seletedPlaid)
+    setNumOfColor(seletedPlaid.colors.length)
+    setLiked(true)
+  }
+
+
 
   return (
     <div className="container">
@@ -157,7 +185,7 @@ const Plaidr = () => {
                   <TwillPicker
                     twill={plaidSettings.twill}
                     setTwill={(twill) =>
-                      setPlaidSettings((plaidSettings) => ({
+                      onChangePlaidSettings((plaidSettings) => ({
                         ...plaidSettings,
                         twill,
                       }))
@@ -166,7 +194,7 @@ const Plaidr = () => {
                   <SizePicker
                     size={plaidSettings.size}
                     setSize={(size) =>
-                      setPlaidSettings((plaidSettings) => ({
+                      onChangePlaidSettings((plaidSettings) => ({
                         ...plaidSettings,
                         size,
                       }))
@@ -176,7 +204,8 @@ const Plaidr = () => {
                     numOfColor={numOfColor}
                     setNumOfColor={setNumOfColor}
                     getNewColors={getNewColors}
-                    setPlaidSettings={setPlaidSettings}
+                    setPlaidSettings={onChangePlaidSettings}
+                    disabled={!imageArray.length}
                   />
                   <PreviewSizeInput
                     plaidWidth={plaidWidth}
@@ -204,6 +233,7 @@ const Plaidr = () => {
               <button
                 onClick={handleLike}
                 className="btn btn--primary preview-like__btn"
+                disabled={liked}
               >
                 💜
               </button>
@@ -212,15 +242,17 @@ const Plaidr = () => {
               getNewPivots={getNewPivots}
               getNewColors={getNewColors}
               setPivotsAndColors={(pivotsAndColors) =>
-                setPlaidSettings({ ...plaidSettings, ...pivotsAndColors })
+                onChangePlaidSettings({ ...plaidSettings, ...pivotsAndColors })
               }
             />
           </div>
         </div>
         <div className="row-item">
           <LikedPlaids
+            handleSelectPlaid={handleSelectLiked}
             likedPlaids={likedPlaids}
             setLikedPlaids={setLikedPlaids}
+            setNextId={setNextId}
           />
         </div>
       </div>

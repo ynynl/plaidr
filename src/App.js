@@ -7,7 +7,7 @@ function App() {
       <div className="App-container">
         <header className="App-header">
           <h1>plaidr</h1>
-          <a href="https://github.com/ynynl/plaidr">
+          <a href="https://github.com/ynynl/plaidr" target="_blank">
             <h4>Github</h4>
           </a>
         </header>
@@ -16,8 +16,8 @@ function App() {
         </main>
       </div>
       <footer className="App-footer">
-        <a href="https://github.com/ynynl">
-          <h4>plaidr by ynynl</h4>
+        <a href="https://github.com/ynynl/plaidr" target="_blank">
+          <h4>a random plaid generator, made by ynynl</h4>
         </a>
       </footer>
     </div>

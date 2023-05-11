@@ -160,6 +160,7 @@
     border: 1px solid black;
     border-radius: 5px;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .liked-plaids {
@@ -178,6 +179,7 @@
     font-weight: bold;
     border-color: #374465;
     cursor: pointer;
+    outline: none;
 }
 
 
@@ -185,7 +187,6 @@
     background-color: #374465;
     color: #F7A588;
 }
-
 
 .btn--primary {
     background-color: #374465;
@@ -195,6 +196,12 @@
 .btn--primary:hover {
     background-color: #374465;
     border-color: #F7A588;
+}
+
+.btn--primary:disabled {
+    background: none;
+    border: 0;
+    outline: none;
 }
 
 .input-container {
