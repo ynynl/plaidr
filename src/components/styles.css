@@ -3,223 +3,219 @@
 /* #F7A588 */
 
 .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 80%;
-    max-width: 1200px;
-    margin: 0 auto;
-    gap: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 24px;
 }
 
 @media screen and (max-width: 600px) {
-    .container {
-        width: 100%;
-    }
+  .container {
+    width: 100%;
+  }
 }
 
 .row-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    min-height: 825px;
-    width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  min-height: 825px;
+  width: 100%;
 }
 
 .row-item {
-    width: 40%;
+  width: 40%;
 }
 
 @media screen and (max-width: 1024px) {
-    .row-item {
-        width: 100%;
-    }
+  .row-item {
+    width: 100%;
+  }
 }
 
 .tab-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 331px;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 331px;
+  gap: 8px;
 }
 
 .preview {
-    object-fit: cover;
+  object-fit: cover;
 }
 
 .preview--md {
-    width: 300px;
-    height: 300px;
+  width: 300px;
+  height: 300px;
 }
 
 .full-screen-overlay__image {
-    position: absolute;
-    z-index: 2;
+  position: absolute;
+  z-index: 2;
 }
 
-
 .full_screen_overlay {
-    width: 100vw;
-    height: 100vh;
-    background-repeat: repeat;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  background-repeat: repeat;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
 }
 
 .spinner {
-    display: inline-block;
-    border: 2px solid #f3f3f3;
-    /* light gray border */
-    border-radius: 50%;
-    /* makes square div into a circle */
-    border-top: 2px solid #F7A588;
-    /* blue border */
-    width: 30px;
-    height: 30px;
-    animation: spin 2s linear infinite;
-    /* rotate the spinner continuously */
+  display: inline-block;
+  border: 2px solid #f3f3f3;
+  /* light gray border */
+  border-radius: 50%;
+  /* makes square div into a circle */
+  border-top: 2px solid #f7a588;
+  /* blue border */
+  width: 30px;
+  height: 30px;
+  animation: spin 2s linear infinite;
+  /* rotate the spinner continuously */
 }
 
 @keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
+  0% {
+    transform: rotate(0deg);
+  }
 
-    100% {
-        transform: rotate(360deg);
-    }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .drag-drop-container {
-    max-width: 246px;
-    min-height: 246px;
-    padding: 25px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    margin: 10px;
-    font-size: 1rem;
-
+  max-width: 246px;
+  min-height: 246px;
+  padding: 25px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  margin: 10px;
+  font-size: 1rem;
 }
 
 .shadow-box {
-    background-color: #374465;
-    color: #F7A588;
-    box-shadow: 20px 20px 0px #F7A588;
-    border: 2px solid #F7A588;
-    margin: 24px;
-
+  background-color: #374465;
+  color: #f7a588;
+  box-shadow: 20px 20px 0px #f7a588;
+  border: 2px solid #f7a588;
+  margin: 24px;
 }
 
 .plaid-setting {
-    display: flex;
-    flex-direction: column;
-    background-color: #F7A588;
-    padding: 8px;
-    margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  background-color: #f7a588;
+  padding: 8px;
+  margin-top: 48px;
 }
 
 .preview-container {
-    position: relative;
-    margin: 10px;
+  position: relative;
+  margin: 10px;
 }
 
 .preview-plaid {
-    object-fit: contain;
-    width: fit-content;
-    max-width: 100%;
-    min-height: 300px;
-    cursor: pointer;
-
+  object-fit: contain;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 300px;
+  cursor: pointer;
 }
 
 .preview-like__btn {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    margin: 10px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  margin: 10px;
 }
 
 .preview-generate-btns {
-    display: flex;
-    margin-top: 36px;
-    gap: 8px;
+  display: flex;
+  margin-top: 36px;
+  gap: 8px;
 }
 
 .liked-plaid {
-    margin: 10px;
-    border: 1px solid black;
-    border-radius: 5px;
-    overflow: hidden;
-    cursor: pointer;
+  margin: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 .liked-plaids {
-    margin-top: 24px;
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    max-height: 667px;
-    overflow-y: scroll;
+  margin-top: 24px;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 667px;
+  overflow-y: scroll;
 }
 
 .btn {
-    color: #374465;
-    background-color: #f4d9cf;
-    padding: 8px;
-    font-weight: bold;
-    border-color: #374465;
-    cursor: pointer;
-    outline: none;
+  color: #374465;
+  background-color: #f4d9cf;
+  padding: 8px;
+  font-weight: bold;
+  border-color: #374465;
+  cursor: pointer;
+  outline: none;
 }
 
-
 .btn:hover {
-    background-color: #374465;
-    color: #F7A588;
+  background-color: #374465;
+  color: #f7a588;
 }
 
 .btn--primary {
-    background-color: #374465;
-    color: #F7A588;
+  background-color: #374465;
+  color: #f7a588;
 }
 
 .btn--primary:hover {
-    background-color: #374465;
-    border-color: #F7A588;
+  background-color: #374465;
+  border-color: #f7a588;
 }
 
-.btn--primary:disabled {
-    background: none;
-    border: 0;
-    outline: none;
+.btn:disabled {
+  background-color: #f4d9cf;
+  color: GrayText;
+  border-color: #374465;
+  cursor: default;
 }
 
 .input-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
 .input-label {
-    margin-right: 12px;
-    font-weight: bold;
+  margin-right: 12px;
+  font-weight: bold;
 }
 
 .input-field {
-    max-width: 40px;
-    border: 1px solid gray;
-    border-radius: 3px;
-    padding: 5px;
-    margin-right: 10px;
+  max-width: 40px;
+  border: 1px solid gray;
+  border-radius: 3px;
+  padding: 5px;
+  margin-right: 10px;
 }

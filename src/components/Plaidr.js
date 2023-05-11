@@ -41,6 +41,18 @@ const ImagePreviewTab = ({ image, isLoading, setShowOverlay, showOverlay }) => {
   );
 };
 
+const LikeButton = ({ liked, handleLike }) => (
+  <div className="preview-like__btn">
+    {liked ? (
+      <span>💜</span>
+    ) : (
+      <button onClick={handleLike} className="btn btn--primary">
+        💜
+      </button>
+    )}
+  </div>
+);
+
 const Plaidr = () => {
   const [image, setImage] = useState(null);
   const [imageArray, setImageArray] = useState([]);
@@ -58,12 +70,12 @@ const Plaidr = () => {
   const [plaidHeight, setPlaidHeight] = useState(300);
   const [likedPlaids, setLikedPlaids] = useState([]);
   const [nextId, setNextId] = useState(1);
-  const [liked, setLiked] = useState(false)
+  const [liked, setLiked] = useState(false);
 
   const onChangePlaidSettings = (plaidSettings) => {
-    setPlaidSettings(plaidSettings)
-    setLiked(false)
-  }
+    setPlaidSettings(plaidSettings);
+    setLiked(false);
+  };
 
   const getNewPivots = useCallback(
     (currNumOfColor = numOfColor) => getRandomPivots(currNumOfColor - 1),
@@ -103,52 +115,56 @@ const Plaidr = () => {
   );
 
   const handleLike = useCallback(() => {
-    setLikedPlaids([
+    setLikedPlaids((likedPlaids) => [
       {
-        id: nextId,
         ...plaidSettings,
+        id: nextId,
         src: generateThumbNailImgSrc(plaidSettings),
       },
       ...likedPlaids,
     ]);
+
     const storedLikedPlaidsInString = localStorage.getItem("likedPlaids");
-    const storedLikedPlaids = storedLikedPlaidsInString ? JSON.parse(storedLikedPlaidsInString) : []
+    const storedLikedPlaids = storedLikedPlaidsInString
+      ? JSON.parse(storedLikedPlaidsInString)
+      : [];
     localStorage.setItem(
       "likedPlaids",
       JSON.stringify([
         {
+          ...plaidSettings,
           id: nextId,
-          ...plaidSettings
         },
         ...storedLikedPlaids,
       ])
     );
     localStorage.setItem("nextId", (nextId + 1).toString());
+
     setNextId(nextId + 1);
-    setLiked(true)
-  }, [likedPlaids, plaidSettings, nextId]);
 
+    setLiked(true);
+  }, [plaidSettings, nextId]);
 
-  const handleSelectLiked = (seletedPlaid) => {
-    setPlaidSettings(seletedPlaid)
-    setNumOfColor(seletedPlaid.colors.length)
-    setLiked(true)
-  }
+  const handleSelectLiked = (selectedPlaid) => {
+    setPlaidSettings(selectedPlaid);
+    setNumOfColor(selectedPlaid.colors.length);
+    setLiked(true);
+  };
 
-
+  const FullScreenOverLay = () =>
+    showOverlay && (
+      <div
+        className="full_screen_overlay"
+        onClick={() => setShowOverlay(false)}
+        style={{
+          backgroundImage: `url(${plaidImageCanvas.toDataURL()})`,
+        }}
+      />
+    );
 
   return (
     <div className="container">
-      {showOverlay && (
-        <div
-          className="full_screen_overlay"
-          onClick={() => setShowOverlay(false)}
-          style={{
-            backgroundImage: `url(${plaidImageCanvas.toDataURL()})`,
-          }}
-        ></div>
-      )}
-
+      <FullScreenOverLay />
       <div className="row-container">
         <div className="row-item">
           <Tabs
@@ -214,7 +230,6 @@ const Plaidr = () => {
                     setPlaidHeight={setPlaidHeight}
                   />
                 </div>
-
               </TabPanel>
             </div>
           </Tabs>
@@ -230,13 +245,7 @@ const Plaidr = () => {
                 onClick={() => setShowOverlay(true)}
                 width="100%"
               />
-              <button
-                onClick={handleLike}
-                className="btn btn--primary preview-like__btn"
-                disabled={liked}
-              >
-                💜
-              </button>
+              <LikeButton liked={liked} handleLike={handleLike} />
             </div>
             <GenerateButtons
               getNewPivots={getNewPivots}
@@ -244,6 +253,7 @@ const Plaidr = () => {
               setPivotsAndColors={(pivotsAndColors) =>
                 onChangePlaidSettings({ ...plaidSettings, ...pivotsAndColors })
               }
+              hasColors={!!imageArray.length}
             />
           </div>
         </div>

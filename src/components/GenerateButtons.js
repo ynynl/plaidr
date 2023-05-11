@@ -5,6 +5,7 @@ const GenerateButtons = ({
   getNewPivots,
   getNewColors,
   setPivotsAndColors,
+  hasColors
 }) => {
   const handleNewColor = () =>
     setPivotsAndColors({
@@ -25,13 +26,13 @@ const GenerateButtons = ({
 
   return (
     <div className="preview-generate-btns">
-      <button onClick={handleNewPivots} className="btn">
+      <button onClick={handleNewPivots} className="btn" >
         Shuffle Pattern
       </button>
-      <button onClick={handleNewColor} className="btn">
+      <button onClick={handleNewColor} className="btn" disabled={!hasColors}>
         Shuffle Color
       </button>
-      <button onClick={handleNewPivotsAndColor} className="btn">
+      <button onClick={handleNewPivotsAndColor} className="btn" disabled={!hasColors}>
         Shuffle Both
       </button>
     </div>
