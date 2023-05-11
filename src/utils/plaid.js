@@ -29,13 +29,6 @@ function generatePlaid({
     throw new Error("Invalid input. Please provide pivot for each color except the last one.");
   }
 
-  console.log({
-    colors,
-    size,
-    twill,
-    pivots
-  });
-
   const sett = createSett(size, colors, pivots);
   const wrap = createWrap(size, sett);
   const rotatedWrap = rotateWrap(size, wrap);
