@@ -26,7 +26,7 @@
     align-items: center;
     flex-wrap: wrap;
     min-height: 825px;
-    /* add any additional styling here */
+    width: 100%;
 }
 
 .row-item {

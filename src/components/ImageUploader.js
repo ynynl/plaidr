@@ -1,6 +1,9 @@
 import React from "react";
 import { useDropzone } from "react-dropzone";
 import "./styles.css";
+import sample_1 from "../images/sample-1.jpeg";
+import sample_2 from "../images/sample-2.jpeg";
+import sample_3 from "../images/sample-3.jpeg";
 
 const ImageUploader = ({
   setImage,
@@ -52,26 +55,26 @@ const ImageUploader = ({
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   return (
-      <div {...getRootProps()} className="drag-drop-container shadow-box">
-        <input {...getInputProps()} type="file" accept="image/*" />
-        <p>
-          <strong>Drag 'n' drop</strong> image files here,
-          <strong>click</strong> to select a image,
-        </p>
-        <p>
-          or <strong>try one of the following</strong>
-        </p>
-        <div
-          {...getRootProps({
-            onClick: (event) => event.stopPropagation(),
-          })}
-          style={{ display: "flex", gap: "12px" }}
-        >
-          <ExampleImage src={"/images/sample-1.jpeg"} handleImage={handleImage} />
-          <ExampleImage src={"/images/sample-2.jpeg"} handleImage={handleImage} />
-          <ExampleImage src={"/images/sample-3.jpeg"} handleImage={handleImage} />
-        </div>
+    <div {...getRootProps()} className="drag-drop-container shadow-box">
+      <input {...getInputProps()} type="file" accept="image/*" />
+      <p>
+        <strong>Drag 'n' drop</strong> image files here,
+        <strong>click</strong> to select a image,
+      </p>
+      <p>
+        or <strong>try one of the following</strong>
+      </p>
+      <div
+        {...getRootProps({
+          onClick: (event) => event.stopPropagation(),
+        })}
+        style={{ display: "flex", gap: "12px" }}
+      >
+        <ExampleImage src={sample_1} handleImage={handleImage} />
+        <ExampleImage src={sample_2} handleImage={handleImage} />
+        <ExampleImage src={sample_3} handleImage={handleImage} />
       </div>
+    </div>
   );
 };
 
