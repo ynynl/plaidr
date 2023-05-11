@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/plaidr/static/css/main.588d6215.css",
+    "main.js": "/plaidr/static/js/main.3ac4621d.js",
+    "static/js/787.da578428.chunk.js": "/plaidr/static/js/787.da578428.chunk.js",
+    "index.html": "/plaidr/index.html",
+    "main.588d6215.css.map": "/plaidr/static/css/main.588d6215.css.map",
+    "main.3ac4621d.js.map": "/plaidr/static/js/main.3ac4621d.js.map",
+    "787.da578428.chunk.js.map": "/plaidr/static/js/787.da578428.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.588d6215.css",
+    "static/js/main.3ac4621d.js"
+  ]
+}
