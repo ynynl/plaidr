@@ -171,9 +171,9 @@ const Plaidr = () => {
     setLiked(true);
   };
 
-  const FullScreenOverLay = () =>
-    showOverlay &&
-    plaidImageCanvas && (
+  const FullScreenOverLay = () => {
+    if (!plaidImageCanvas || !showOverlay) return null;
+    return (
       <div
         className="full_screen_overlay"
         onClick={() => setShowOverlay(false)}
@@ -182,6 +182,7 @@ const Plaidr = () => {
         }}
       />
     );
+  };
 
   return (
     <div className="container">
