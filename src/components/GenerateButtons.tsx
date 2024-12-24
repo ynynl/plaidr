@@ -1,7 +1,14 @@
 import React from "react";
 import "./styles.css";
 
-const GenerateButtons = ({
+interface GenerateButtonsProps {
+  getNewPivots: () => number[][];
+  getNewColors: () => number[][];
+  setPivotsAndColors: (settings: { colors?: number[][], pivots?: number[][] }) => void;
+  hasColors: boolean;
+}
+
+const GenerateButtons: React.FC<GenerateButtonsProps> = ({
   getNewPivots,
   getNewColors,
   setPivotsAndColors,
@@ -17,7 +24,6 @@ const GenerateButtons = ({
       pivots: getNewPivots(),
     });
 
-
   const handleNewPivotsAndColor = () =>
     setPivotsAndColors({
       colors: getNewColors(),
@@ -26,7 +32,7 @@ const GenerateButtons = ({
 
   return (
     <div className="preview-generate-btns">
-      <button onClick={handleNewPivots} className="btn" >
+      <button onClick={handleNewPivots} className="btn">
         Shuffle Pattern
       </button>
       <button onClick={handleNewColor} className="btn" disabled={!hasColors}>
@@ -39,4 +45,4 @@ const GenerateButtons = ({
   );
 };
 
-export default GenerateButtons
+export default GenerateButtons; 

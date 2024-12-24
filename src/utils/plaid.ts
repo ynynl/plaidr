@@ -161,3 +161,4 @@ function applyTwill(size, rotatedWrap, mask, wrap) {
 
 export default generatePlaid;
 
+

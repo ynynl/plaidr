@@ -1,17 +1,18 @@
 import React from "react";
 
-const DownloadButton = ({ canvas, filename }) => {
-  const downloadCanvasAsImage = () => {
-    // Get data URL representing the image
-    const dataUrl = canvas.toDataURL("image/png");
+interface DownloadButtonProps {
+  canvas: HTMLCanvasElement;
+  filename: string;
+}
 
-    // Create temporary link element
+const DownloadButton: React.FC<DownloadButtonProps> = ({ canvas, filename }) => {
+  const downloadCanvasAsImage = () => {
+    const dataUrl = canvas.toDataURL("image/png");
     const link = document.createElement("a");
     link.href = dataUrl;
     link.download = filename;
 
-    // Trigger click event on the link to download the image
-    document.body.appendChild(link); // Required for Firefox
+    document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
@@ -23,4 +24,4 @@ const DownloadButton = ({ canvas, filename }) => {
   );
 };
 
-export default DownloadButton;
+export default DownloadButton; 

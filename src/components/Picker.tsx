@@ -1,26 +1,35 @@
 import React from "react";
 import { getRandomPivots, sortPairsByDistance } from "../utils/utils";
+import { PlaidSettings } from "../types";
 
-export const ColorPicker = ({
+interface ColorPickerProps {
+  numOfColor: number;
+  setNumOfColor: (num: number) => void;
+  setPlaidSettings: (settings: PlaidSettings | ((prev: PlaidSettings) => PlaidSettings)) => void;
+  getNewColors: (numOfColor?: number) => number[][];
+  disabled: boolean;
+}
+
+export const ColorPicker: React.FC<ColorPickerProps> = ({
   numOfColor,
   setNumOfColor,
   setPlaidSettings,
   getNewColors,
   disabled
 }) => {
-  const handleNumOfColorChange = (event) => {
-    const newNumOfColor = event.target.value;
+  const handleNumOfColorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newNumOfColor = Number(event.target.value);
     const numToChange = newNumOfColor - numOfColor;
     setPlaidSettings((plaidSettings) => {
-      let newPivots, newColors;
+      let newPivots: number[][], newColors: number[][];
       if (newNumOfColor > numOfColor) {
         newPivots = sortPairsByDistance(
           plaidSettings.pivots.concat(getRandomPivots(numToChange))
         );
         newColors = plaidSettings.colors.concat(getNewColors(numToChange));
       } else {
-        newPivots = [...plaidSettings.pivots].slice(0, numToChange);
-        newColors = [...plaidSettings.colors].slice(0, numToChange);
+        newPivots = [...plaidSettings.pivots].slice(0, newNumOfColor - 1);
+        newColors = [...plaidSettings.colors].slice(0, newNumOfColor);
       }
       return {
         ...plaidSettings,
@@ -28,7 +37,7 @@ export const ColorPicker = ({
         colors: newColors,
       };
     });
-    setNumOfColor(Number(newNumOfColor));
+    setNumOfColor(newNumOfColor);
   };
 
   return (
@@ -48,8 +57,13 @@ export const ColorPicker = ({
   );
 };
 
-export const TwillPicker = ({ twill, setTwill }) => {
-  const handleTwillChange = (event) => {
+interface TwillPickerProps {
+  twill: string;
+  setTwill: (twill: string) => void;
+}
+
+export const TwillPicker: React.FC<TwillPickerProps> = ({ twill, setTwill }) => {
+  const handleTwillChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTwill(event.target.value);
   };
 
@@ -63,7 +77,6 @@ export const TwillPicker = ({ twill, setTwill }) => {
         value="tartan"
         checked={twill === "tartan"}
         onChange={handleTwillChange}
-
       />
       <label htmlFor="tartan">Tartan</label>
       <input
@@ -73,9 +86,8 @@ export const TwillPicker = ({ twill, setTwill }) => {
         value="net"
         checked={twill === "net"}
         onChange={handleTwillChange}
-
       />
-      <label htmlFor="net" >Net</label>
+      <label htmlFor="net">Net</label>
       <input
         type="radio"
         id="madras"
@@ -84,13 +96,18 @@ export const TwillPicker = ({ twill, setTwill }) => {
         checked={twill === "madras"}
         onChange={handleTwillChange}
       />
-      <label htmlFor="madras" >Madras</label>
+      <label htmlFor="madras">Madras</label>
     </div>
   );
 };
 
-export const SizePicker = ({ size, setSize }) => {
-  const handleSizeChange = (event) => {
+interface SizePickerProps {
+  size: number;
+  setSize: (size: number) => void;
+}
+
+export const SizePicker: React.FC<SizePickerProps> = ({ size, setSize }) => {
+  const handleSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newSize = Math.pow(2, Number(event.target.value));
     setSize(newSize);
   };
@@ -109,4 +126,4 @@ export const SizePicker = ({ size, setSize }) => {
       />
     </div>
   );
-};
+}; 
