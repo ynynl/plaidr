@@ -1,22 +1,22 @@
 import generatePlaid from "./plaid";
+import { PlaidOptions } from "../types/plaid";
 
-export function getRandomPair() {
-  const pair = [Math.random(), Math.random()];
-  return pair.sort();
+export function getRandomPair(): [number, number] {
+  const pair: [number, number] = [Math.random(), Math.random()];
+  return pair.sort() as [number, number];
 }
 
-export function sortPairsByDistance(randomPairs) {
+export function sortPairsByDistance(randomPairs: number[][]): number[][] {
   return randomPairs.sort((a, b) => Math.abs(b[0] - b[1]) - Math.abs(a[0] - a[1]));
 }
 
-export function getRandomPivots(length) {
+export function getRandomPivots(length: number): number[][] {
   const randomN2 = Array.from({ length }, getRandomPair);
   return sortPairsByDistance(randomN2);
 }
 
-// Helper function to get random items from an array
-export const getRandomItems = (arr, num) => {
-  const result = [];
+export const getRandomItems = (arr: number[][], num: number): number[][] => {
+  const result: number[][] = [];
   for (let i = 0; i < num; i++) {
     const randomIndex = Math.floor(Math.random() * arr.length);
     result.push(arr[randomIndex]);
@@ -24,8 +24,7 @@ export const getRandomItems = (arr, num) => {
   return result;
 };
 
-// Helper function to convert a 2D array of RGB values to image data
-const arrayToImageData = (imageArray) => {
+const arrayToImageData = (imageArray: number[][][]): ImageData => {
   const imageData = new ImageData(imageArray.length, imageArray[0].length);
   for (let x = 0; x < imageArray.length; x++) {
     for (let y = 0; y < imageArray[x].length; y++) {
@@ -39,63 +38,74 @@ const arrayToImageData = (imageArray) => {
   return imageData;
 };
 
-// Helper function to convert image data to pattern and fill with color
-const imageDataToCanvas = (imageData) => {
+const imageDataToCanvas = (imageData: ImageData): HTMLCanvasElement => {
   const patternCanvas = document.createElement("canvas");
   patternCanvas.width = imageData.width;
   patternCanvas.height = imageData.height;
 
   const patternContext = patternCanvas.getContext("2d");
+  if (!patternContext) throw new Error("Could not get 2d context");
+  
   patternContext.putImageData(imageData, 0, 0);
-
   return patternCanvas;
 };
 
-// Helper function to create canvas with a pattern
-export const createSizedCanvas = (patternCanvas, width = 300, height= 300) => {
+export const createSizedCanvas = (
+  patternCanvas: HTMLCanvasElement, 
+  width: number = 300, 
+  height: number = 300
+): HTMLCanvasElement => {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Could not get 2d context");
+
   canvas.width = width;
   canvas.height = height;
   const pattern = ctx.createPattern(patternCanvas, "repeat");
+  if (!pattern) throw new Error("Could not create pattern");
+
   ctx.fillStyle = pattern;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   return canvas;
 };
-// Helper function to convert canvas to a data URL
-export const canvasToDataURL = (canvas) => {
+
+export const canvasToDataURL = (canvas: HTMLCanvasElement): string => {
   return canvas.toDataURL();
 };
 
-// Helper function to convert a 3D array of RGB values to a data URL
-export const arrayToDataURL = (imageArray) => {
+export const arrayToDataURL = (imageArray: number[][][]): string => {
   const imageData = arrayToImageData(imageArray);
   const patternCanvas = imageDataToCanvas(imageData);
   const fullSizePatternCanvas = createSizedCanvas(patternCanvas);
   return canvasToDataURL(fullSizePatternCanvas);
 };
-// Helper function to convert a 3D array of RGB values to a data URL
-export const rgbArrayToPatternCanvas = (rgbArray) => {
+
+export const rgbArrayToPatternCanvas = (rgbArray: number[][][]): HTMLCanvasElement => {
   const imageData = arrayToImageData(rgbArray);
   return imageDataToCanvas(imageData);
 };
 
-export const generatePlaidImageCanvas = (plaidSettings) => {
+export const generatePlaidImageCanvas = (plaidSettings: PlaidOptions): HTMLCanvasElement | null => {
   if (!plaidSettings.colors.length || !plaidSettings.pivots.length) {
-    return null; // If plaidSettings is not valid, return null
+    return null;
   }
   const plaidArray = generatePlaid(plaidSettings);
   return rgbArrayToPatternCanvas(plaidArray);
-}
+};
 
-export const canvasToImgSrc = (plaidImageCanvas, plaidWidth, plaidHeight) => {
-  const canvas = createSizedCanvas(plaidImageCanvas, plaidWidth, plaidHeight)
+export const canvasToImgSrc = (
+  plaidImageCanvas: HTMLCanvasElement, 
+  plaidWidth: number, 
+  plaidHeight: number
+): string => {
+  const canvas = createSizedCanvas(plaidImageCanvas, plaidWidth, plaidHeight);
   return canvas.toDataURL();
 };
 
-export const generateThumbNailImgSrc = (plaidSetting) => {
-  const plaidImageCanvas = generatePlaidImageCanvas(plaidSetting)
-  return canvasToImgSrc(plaidImageCanvas, 50, 50)
+export const generateThumbNailImgSrc = (plaidSetting: PlaidOptions): string => {
+  const plaidImageCanvas = generatePlaidImageCanvas(plaidSetting);
+  if (!plaidImageCanvas) return '';
+  return canvasToImgSrc(plaidImageCanvas, 50, 50);
 };
 
 

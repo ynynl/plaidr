@@ -1,26 +1,15 @@
-
+import { PlaidOptions, TwillPattern, NDArray } from "../types/plaid";
 const ndarray = require("ndarray");
 const tile = require("ndarray-tile");
 const pack = require("ndarray-pack");
 const unpack = require("ndarray-unpack");
-
-/**
- * Generate a plaid pattern
- * @param {Object} options - The options object
- * @param {Array} options.colors - The colors of the plaid
- * @param {number} options.size - The size of the plaid, must be a multiple of 4
- * @param {string} options.twill - The twill pattern of the plaid, can only be "tartan", "madras", or "net"
- * @param {Array} options.pivots - The pivots of the plaid
- * @returns {Array} - The generated plaid pattern
- */
 
 function generatePlaid({
   colors,
   size,
   twill,
   pivots
-}) {
-
+}: PlaidOptions): number[][][] {
   if (size % 4 !== 0) {
     throw new Error("Invalid size input. Please input a multiple of 4");
   }
@@ -40,8 +29,8 @@ function generatePlaid({
   return unpackedPlaid;
 }
 
-function createSett(size, colors, pivots) {
-  const sett = ndarray(new Float64Array(size * 3), [size, 3]);
+function createSett(size: number, colors: number[][], pivots: number[][]): NDArray {
+  const sett: NDArray = ndarray(new Float64Array(size * 3), [size, 3]);
   const background = colors[colors.length - 1];
 
   // Set background color
@@ -66,7 +55,7 @@ function createSett(size, colors, pivots) {
   return sett;
 }
 
-function createThreads(size, pivots) {
+function createThreads(size: number, pivots: number[][]): number[][] {
   const threads = pivots.map((pivot) => [
     Math.floor(pivot[0] * size),
     Math.floor(pivot[1] * size),
@@ -75,7 +64,7 @@ function createThreads(size, pivots) {
   return threads;
 }
 
-function createWrap(size, sett) {
+function createWrap(size: number, sett: NDArray): NDArray {
   // Create wrap
   const tiledWrap = tile(sett, [size, 1, 1]);
   const wrap = ndarray(tiledWrap.data, [size, size, 3]);
@@ -83,7 +72,7 @@ function createWrap(size, sett) {
   return wrap;
 }
 
-function rotateWrap(size, wrap) {
+function rotateWrap(size: number, wrap: NDArray): NDArray {
   // Rotate wrap
   const rotatedWrap = ndarray(new Float64Array(size * size * 3), [
     size,
@@ -102,9 +91,8 @@ function rotateWrap(size, wrap) {
   return rotatedWrap;
 }
 
-function createPattern(twill) {
-  // Create twill pattern
-  const twillMap = {
+function createPattern(twill: string): TwillPattern {
+  const twillMap: Record<string, TwillPattern> = {
     tartan: [
       [1, 0, 0, 1],
       [0, 0, 1, 1],
@@ -129,19 +117,17 @@ function createPattern(twill) {
     throw new Error("Invalid twill input. Please input 'tartan', 'madras', or 'net'");
   }
 
-  const pattern = twillMap[twill];
-
-  return pattern;
+  return twillMap[twill];
 }
 
-function createMask(size, pattern) {
+function createMask(size: number, pattern: TwillPattern): NDArray {
   const numOfPattern = Math.ceil(size / pattern.length);
   const mask = tile(pack(pattern), [numOfPattern, numOfPattern]);
 
   return mask;
 }
 
-function applyTwill(size, rotatedWrap, mask, wrap) {
+function applyTwill(size: number, rotatedWrap: NDArray, mask: NDArray, wrap: NDArray): NDArray {
   // Apply twill pattern
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
