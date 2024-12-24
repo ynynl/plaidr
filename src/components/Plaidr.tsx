@@ -73,7 +73,7 @@ const LikeButton = ({ liked, handleLike }: LikeButtonProps) => (
 
 const Plaidr = () => {
   const [image, setImage] = useState<string>();
-  const [imageArray, setImageArray] = useState<number[][][]>([]);
+  const [imageArray, setImageArray] = useState<number[][]>([]);
   const [plaidSettings, setPlaidSettings] = useState<PlaidSettings>({
     colors: [],
     size: 128,
@@ -109,7 +109,7 @@ const Plaidr = () => {
   );
 
   const handleNewRgbArray = useCallback(
-    (newRgbArray: number[][][]) => {
+    (newRgbArray: number[][]) => {
       setImageArray(newRgbArray);
       onChangePlaidSettings((plaidSettings) => ({
         ...plaidSettings,
@@ -118,7 +118,7 @@ const Plaidr = () => {
       }));
       setIsLoading(false);
     },
-    [getNewColors, getNewPivots, numOfColor, plaidSettings]
+    [getNewColors, getNewPivots, numOfColor]
   );
 
   // We need to check if plaidSettings is a valid object before generating plaidImageCanvas

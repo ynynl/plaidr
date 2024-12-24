@@ -7,7 +7,9 @@ export function getRandomPair(): [number, number] {
 }
 
 export function sortPairsByDistance(randomPairs: number[][]): number[][] {
-  return randomPairs.sort((a, b) => Math.abs(b[0] - b[1]) - Math.abs(a[0] - a[1]));
+  return randomPairs.sort(
+    (a, b) => Math.abs(b[0] - b[1]) - Math.abs(a[0] - a[1])
+  );
 }
 
 export function getRandomPivots(length: number): number[][] {
@@ -15,8 +17,8 @@ export function getRandomPivots(length: number): number[][] {
   return sortPairsByDistance(randomN2);
 }
 
-export const getRandomItems = (arr: number[][][], num: number): number[][][] => {
-  const result: number[][][] = [];
+export const getRandomItems = (arr: number[][], num: number): number[][] => {
+  const result: number[][] = [];
   for (let i = 0; i < num; i++) {
     const randomIndex = Math.floor(Math.random() * arr.length);
     result.push(arr[randomIndex]);
@@ -45,14 +47,14 @@ const imageDataToCanvas = (imageData: ImageData): HTMLCanvasElement => {
 
   const patternContext = patternCanvas.getContext("2d");
   if (!patternContext) throw new Error("Could not get 2d context");
-  
+
   patternContext.putImageData(imageData, 0, 0);
   return patternCanvas;
 };
 
 export const createSizedCanvas = (
-  patternCanvas: HTMLCanvasElement, 
-  width: number = 300, 
+  patternCanvas: HTMLCanvasElement,
+  width: number = 300,
   height: number = 300
 ): HTMLCanvasElement => {
   const canvas = document.createElement("canvas");
@@ -80,12 +82,16 @@ export const arrayToDataURL = (imageArray: number[][][]): string => {
   return canvasToDataURL(fullSizePatternCanvas);
 };
 
-export const rgbArrayToPatternCanvas = (rgbArray: number[][][]): HTMLCanvasElement => {
+export const rgbArrayToPatternCanvas = (
+  rgbArray: number[][][]
+): HTMLCanvasElement => {
   const imageData = arrayToImageData(rgbArray);
   return imageDataToCanvas(imageData);
 };
 
-export const generatePlaidImageCanvas = (plaidSettings: PlaidOptions): HTMLCanvasElement | null => {
+export const generatePlaidImageCanvas = (
+  plaidSettings: PlaidOptions
+): HTMLCanvasElement | null => {
   if (!plaidSettings.colors.length || !plaidSettings.pivots.length) {
     return null;
   }
@@ -94,8 +100,8 @@ export const generatePlaidImageCanvas = (plaidSettings: PlaidOptions): HTMLCanva
 };
 
 export const canvasToImgSrc = (
-  plaidImageCanvas: HTMLCanvasElement, 
-  plaidWidth: number, 
+  plaidImageCanvas: HTMLCanvasElement,
+  plaidWidth: number,
   plaidHeight: number
 ): string => {
   const canvas = createSizedCanvas(plaidImageCanvas, plaidWidth, plaidHeight);
@@ -104,9 +110,6 @@ export const canvasToImgSrc = (
 
 export const generateThumbNailImgSrc = (plaidSetting: PlaidOptions): string => {
   const plaidImageCanvas = generatePlaidImageCanvas(plaidSetting);
-  if (!plaidImageCanvas) return '';
+  if (!plaidImageCanvas) return "";
   return canvasToImgSrc(plaidImageCanvas, 50, 50);
 };
-
-
-
