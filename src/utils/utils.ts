@@ -15,8 +15,8 @@ export function getRandomPivots(length: number): number[][] {
   return sortPairsByDistance(randomN2);
 }
 
-export const getRandomItems = (arr: number[][], num: number): number[][] => {
-  const result: number[][] = [];
+export const getRandomItems = (arr: number[][][], num: number): number[][][] => {
+  const result: number[][][] = [];
   for (let i = 0; i < num; i++) {
     const randomIndex = Math.floor(Math.random() * arr.length);
     result.push(arr[randomIndex]);

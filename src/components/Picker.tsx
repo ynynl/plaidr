@@ -58,13 +58,13 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
 };
 
 interface TwillPickerProps {
-  twill: string;
-  setTwill: (twill: string) => void;
+  twill: 'tartan' | 'madras' | 'net';
+  setTwill: (twill: 'tartan' | 'madras' | 'net') => void;
 }
 
 export const TwillPicker: React.FC<TwillPickerProps> = ({ twill, setTwill }) => {
   const handleTwillChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTwill(event.target.value);
+    setTwill(event.target.value as 'tartan' | 'madras' | 'net');
   };
 
   return (

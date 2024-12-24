@@ -1,7 +1,7 @@
 export interface PlaidSettings {
   colors: number[][];
   size: number;
-  twill: string;
+  twill: 'tartan' | 'madras' | 'net';
   pivots: number[][];
 }
 

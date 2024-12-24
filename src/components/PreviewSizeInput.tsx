@@ -1,5 +1,5 @@
 import React from "react";
-import './styles.css';
+import "./styles.css";
 
 interface PreviewSizeInputProps {
   plaidWidth: number;
@@ -14,38 +14,30 @@ const PreviewSizeInput: React.FC<PreviewSizeInputProps> = ({
   setPlaidWidth,
   setPlaidHeight,
 }) => {
-  const handleWidthChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const width = Number(event.target.value);
-    if (!isNaN(width)) {
-      setPlaidWidth(width);
-    }
-  };
-
-  const handleHeightChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const height = Number(event.target.value);
-    if (!isNaN(height)) {
-      setPlaidHeight(height);
-    }
-  };
-
   return (
     <div className="input-container">
       <label htmlFor="width" className="input-label">Preview Size:</label>
-      <input
-        type="number"
-        id="width"
-        className="input-field"
-        value={plaidWidth}
-        onChange={handleWidthChange}
-      />
-      <span>×</span>
-      <input
-        type="number"
-        id="height"
-        className="input-field"
-        value={plaidHeight}
-        onChange={handleHeightChange}
-      />
+      <div className="preview-size-input">
+        <input
+          type="number"
+          id="width"
+          name="width"
+          min={50}
+          max={2000}
+          value={plaidWidth}
+          onChange={(e) => setPlaidWidth(Number(e.target.value))}
+        />
+        <span>×</span>
+        <input
+          type="number"
+          id="height"
+          name="height"
+          min={50}
+          max={2000}
+          value={plaidHeight}
+          onChange={(e) => setPlaidHeight(Number(e.target.value))}
+        />
+      </div>
     </div>
   );
 };

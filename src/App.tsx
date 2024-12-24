@@ -1,7 +1,8 @@
+import React from "react";
 import Plaidr from "./components/Plaidr";
-import './App.css'
+import './App.css';
 
-function App() {
+const App: React.FC = () => {
   return (
     <div className="App">
       <div className="App-container">
@@ -22,6 +23,6 @@ function App() {
       </footer>
     </div>
   );
-}
+};
 
-export default App;
+export default App; 

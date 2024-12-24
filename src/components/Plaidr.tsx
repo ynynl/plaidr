@@ -15,15 +15,28 @@ import "./styles.css";
 
 import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
 import "./react-tabs.css";
+import { PlaidSettings, LikedPlaid } from "../types";
 
-const ImagePreviewTab = ({ image, isLoading, setShowOverlay, showOverlay }) => {
+interface ImagePreviewTabProps {
+  image: string | undefined;
+  isLoading: boolean;
+  setShowOverlay: (show: boolean) => void;
+  showOverlay: boolean;
+}
+
+const ImagePreviewTab = ({
+  image,
+  isLoading,
+  setShowOverlay,
+  showOverlay,
+}: ImagePreviewTabProps) => {
   return (
     <div className="tab-container">
       {isLoading ? (
         <div className="spinner" />
       ) : (
         <div className="shadow-box">
-          {showOverlay && (
+          {showOverlay && image && (
             <img
               src={image}
               alt="upload preview"
@@ -41,7 +54,12 @@ const ImagePreviewTab = ({ image, isLoading, setShowOverlay, showOverlay }) => {
   );
 };
 
-const LikeButton = ({ liked, handleLike }) => (
+interface LikeButtonProps {
+  liked: boolean;
+  handleLike: () => void;
+}
+
+const LikeButton = ({ liked, handleLike }: LikeButtonProps) => (
   <div className="preview-like__btn">
     {liked ? (
       <span>💜</span>
@@ -54,12 +72,12 @@ const LikeButton = ({ liked, handleLike }) => (
 );
 
 const Plaidr = () => {
-  const [image, setImage] = useState(null);
-  const [imageArray, setImageArray] = useState([]);
-  const [plaidSettings, setPlaidSettings] = useState({
+  const [image, setImage] = useState<string>();
+  const [imageArray, setImageArray] = useState<number[][][]>([]);
+  const [plaidSettings, setPlaidSettings] = useState<PlaidSettings>({
     colors: [],
     size: 128,
-    twill: "tartan",
+    twill: "tartan" as const,
     pivots: [],
   });
   const [numOfColor, setNumOfColor] = useState(5);
@@ -68,11 +86,13 @@ const Plaidr = () => {
   const [tabIndex, setTabIndex] = useState(0);
   const [plaidWidth, setPlaidWidth] = useState(300);
   const [plaidHeight, setPlaidHeight] = useState(300);
-  const [likedPlaids, setLikedPlaids] = useState([]);
+  const [likedPlaids, setLikedPlaids] = useState<LikedPlaid[]>([]);
   const [nextId, setNextId] = useState(1);
   const [liked, setLiked] = useState(false);
 
-  const onChangePlaidSettings = (plaidSettings) => {
+  const onChangePlaidSettings = (
+    plaidSettings: React.SetStateAction<PlaidSettings>
+  ) => {
     setPlaidSettings(plaidSettings);
     setLiked(false);
   };
@@ -89,7 +109,7 @@ const Plaidr = () => {
   );
 
   const handleNewRgbArray = useCallback(
-    (newRgbArray) => {
+    (newRgbArray: number[][][]) => {
       setImageArray(newRgbArray);
       onChangePlaidSettings((plaidSettings) => ({
         ...plaidSettings,
@@ -98,7 +118,7 @@ const Plaidr = () => {
       }));
       setIsLoading(false);
     },
-    [getNewColors, getNewPivots, numOfColor]
+    [getNewColors, getNewPivots, numOfColor, plaidSettings]
   );
 
   // We need to check if plaidSettings is a valid object before generating plaidImageCanvas
@@ -145,14 +165,15 @@ const Plaidr = () => {
     setLiked(true);
   }, [plaidSettings, nextId]);
 
-  const handleSelectLiked = (selectedPlaid) => {
+  const handleSelectLiked = (selectedPlaid: LikedPlaid) => {
     setPlaidSettings(selectedPlaid);
     setNumOfColor(selectedPlaid.colors.length);
     setLiked(true);
   };
 
   const FullScreenOverLay = () =>
-    showOverlay && (
+    showOverlay &&
+    plaidImageCanvas && (
       <div
         className="full_screen_overlay"
         onClick={() => setShowOverlay(false)}
@@ -239,7 +260,7 @@ const Plaidr = () => {
           >
             <div className="preview-container shadow-box ">
               <img
-                src={plaidPreview}
+                src={plaidPreview || undefined}
                 alt="preview"
                 className="preview-plaid"
                 onClick={() => setShowOverlay(true)}
