@@ -1,369 +1,140 @@
-:root {
-  --primary: #2563eb;
-  --text: #1e293b;
-  --text-light: #64748b;
-  --border: #e2e8f0;
-  --background: #ffffff;
-  --surface: #f8fafc;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .container {
+    @apply flex flex-col w-full max-w-7xl mx-auto p-4 gap-4;
+  }
+
+  .btn {
+    @apply flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-900 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn--primary, .btn--both {
+    @apply bg-blue-600 border-blue-600 text-white;
+  }
+
+  .plaid-preview-container {
+    @apply relative w-[300px] h-[300px] mx-auto flex justify-center items-center bg-gray-50 border border-gray-200;
+  }
+
+  .plaid-preview-image {
+    @apply max-w-full max-h-full w-auto h-auto object-contain;
+  }
+
+  .liked-plaids {
+    @apply grid gap-2 max-h-[200px] overflow-y-auto p-2 bg-gray-50 justify-center;
+    grid-template-columns: repeat(6, 80px);
+  }
+
+  .liked-plaid {
+    @apply overflow-hidden cursor-pointer relative w-20 h-20;
+    aspect-ratio: 1;
+  }
+
+  .liked-plaid img {
+    @apply w-full h-full object-contain absolute inset-0 bg-gray-50 transition-opacity hover:opacity-80;
+  }
+
+  .input-container {
+    @apply flex items-center gap-6 py-2 border-b border-gray-200 last:border-b-0;
+  }
+
+  .input-label {
+    @apply text-gray-500 min-w-[100px] text-sm;
+  }
+
+  .radio-group {
+    @apply flex items-center bg-gray-100 p-0.5 rounded-lg;
+  }
+
+  .radio-label {
+    @apply flex items-center px-4 py-1.5 text-sm text-gray-600 cursor-pointer transition-all rounded-md;
+  }
+
+  input[type="radio"] {
+    @apply hidden;
+  }
+
+  input[type="radio"]:checked + .radio-label {
+    @apply bg-white text-blue-600 shadow-sm;
+  }
+
+  .preview-generate-btns {
+    @apply flex justify-center gap-3 mt-4 w-full;
+  }
+
+  .preview-generate-btns .btn {
+    @apply min-w-[90px] py-1.5 px-3 justify-center;
+  }
+
+  .shuffle-icon {
+    @apply w-4 h-4;
+  }
+
+  .preview-like__btn {
+    @apply absolute bottom-3 right-3 cursor-pointer opacity-70 hover:opacity-100 transition-opacity;
+  }
+
+  .preview-section {
+    @apply flex flex-col w-full;
+  }
+
+  .back-button {
+    @apply inline-flex items-center gap-2 px-4 py-2 text-gray-900 border border-gray-200 mb-4 self-start;
+  }
+
+  .drag-drop-container {
+    @apply border border-dashed border-gray-200 p-6 text-center cursor-pointer flex flex-col items-center gap-4 justify-center;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+  }
+
+  .example-images {
+    @apply grid grid-cols-2 gap-2 overflow-y-auto;
+    max-height: 200px;
+  }
+
+  .example-image {
+    @apply w-full h-auto object-cover cursor-pointer hover:opacity-80;
+    aspect-ratio: 1;
+  }
+
+  .content-section {
+    @apply bg-white border border-gray-200 p-4;
+  }
+
+  .content-section:has(.liked-plaids) {
+    @apply p-0 border-0 bg-transparent;
+  }
+
+  .full-screen-overlay__image {
+    @apply fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 max-w-[90vw] max-h-[90vh];
+  }
+
+  .full_screen_overlay {
+    @apply fixed inset-0 bg-black/75 backdrop-blur-sm z-40;
+  }
+
+  .spinner {
+    @apply inline-block w-8 h-8 border-2 border-gray-200 border-t-blue-600 rounded-full animate-spin;
+  }
+
+  .preview {
+    @apply object-cover w-[300px] h-[300px];
+  }
+
+  .preview--md {
+    @apply w-[300px] h-[300px] mx-auto;
+  }
+
+  .shadow-box {
+    @apply w-[300px] h-[300px] mx-auto flex justify-center items-center;
+  }
 }
 
-.container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
-  gap: 1rem;
-}
-
-.tab-container {
-  display: flex;
-  flex-direction: column;
-  background: var(--background);
-  min-height: 331px;
-  gap: 1rem;
-}
-
-.preview {
-  object-fit: cover;
-}
-
-.preview--md {
-  width: 300px;
-  height: 300px;
-  margin: 0 auto;
-}
-
-.full-screen-overlay__image {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1100;
-  max-width: 90vw;
-  max-height: 90vh;
-}
-
-.full_screen_overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(4px);
-  z-index: 1000;
-}
-
-.spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--border);
-  border-top-color: var(--primary);
-  border-radius: 50%;
-  animation: spin 0.6s linear infinite;
-}
-
-.drag-drop-container {
-  border: 1px dashed var(--border);
-  padding: 1.5rem;
-  text-align: center;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  height: 450px;
-  justify-content: center;
-}
-
-.preview-container {
-  position: relative;
-  overflow: hidden;
-  border: 1px solid var(--border);
-}
-
-.preview-plaid {
-  width: 100%;
-  min-height: 300px;
-  object-fit: contain;
-}
-
-.preview-like__btn {
-  position: absolute;
-  bottom: 0.75rem;
-  right: 0.75rem;
-  cursor: pointer;
-  opacity: 0.7;
-  transition: opacity 0.2s ease;
-}
-
-.preview-like__btn:hover {
-  opacity: 1;
-}
-
-.preview-like__btn button {
-  border: none;
-  background: none;
-  padding: 0;
-  cursor: pointer;
-  font-size: 1.25rem;
-}
-
-.preview-generate-btns {
-  display: flex;
-  justify-content: center;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  width: 100%;
-}
-
-/* Optional: Make buttons more compact if needed */
-.preview-generate-btns .btn {
-  min-width: 90px;
-  padding: 0.4rem 0.75rem;
-  justify-content: center;
-}
-
-.preview-generate-btns .shuffle-icon {
-  width: 14px;
-  height: 14px;
-}
-
-.liked-plaids {
-  display: grid;
-  grid-template-columns: repeat(6, 80px);
-  gap: 8px;
-  max-height: 200px;
-  overflow-y: auto;
-  padding: 8px;
-  background: var(--surface);
-  justify-content: center;
-}
-
-.liked-plaid {
-  aspect-ratio: 1;
-  overflow: hidden;
-  cursor: pointer;
-  position: relative;
-  width: 80px;
-  height: 80px;
-}
-
-.liked-plaid img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: var(--surface);
-}
-
-.liked-plaid:hover img {
-  opacity: 0.8;
-}
-
-.btn {
-  padding: 0.5rem 1rem;
-  background: var(--background);
-  border: 1px solid var(--border);
-  color: var(--text);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.btn--primary {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: white;
-}
-
-.btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.input-container {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.input-container:last-child {
-  border-bottom: none;
-}
-
-.input-label {
-  color: var(--text-light);
-  min-width: 100px;
-  font-size: 0.9rem;
-}
-
-input[type="range"] {
-  flex: 1;
-  max-width: 200px;
-  height: 2px;
-  background: var(--border);
-  margin: 0;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 12px;
-  height: 12px;
-  background: var(--primary);
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.radio-group {
-  display: flex;
-  align-items: center;
-  background: var(--surface);
-  padding: 2px;
-  border: 1px solid var(--border);
-  width: fit-content;
-}
-
-.radio-label {
-  display: flex;
-  align-items: center;
-  padding: 0.4rem 0.8rem;
-  color: var(--text-light);
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-input[type="radio"] {
-  display: none;
-}
-
-input[type="radio"]:checked + .radio-label {
-  background: var(--background);
-  color: var(--primary);
-}
-
-.content-section {
-  background: var(--background);
-  border: 1px solid var(--border);
-  padding: 1rem;
-}
-
-.content-section:has(.liked-plaids) {
-  padding: 0;
-  border: none;
-  background: transparent;
-}
-
-.back-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  color: var(--text);
-  border: 1px solid var(--border);
-  margin-bottom: 1rem;
-  align-self: flex-start;
-}
-
-.plaid-preview-container {
-  position: relative;
-  width: 300px;
-  height: 300px;
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: var(--surface);
-  border: 1px solid var(--border);
-}
-
-.plaid-preview-image {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-}
-
-.example-images {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  max-width: 600px;
-  margin: 0 auto;
-  overflow-y: auto;
-  max-height: 300px;
-}
-
-.example-image {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-  cursor: pointer;
-}
-
-.example-image:hover {
-  opacity: 0.8;
-}
-
-/* Update number inputs */
-input[type="number"] {
-  width: 60px;
-  padding: 0.25rem 0.5rem;
-  border: 1px solid var(--border);
-  text-align: center;
-  font-size: 0.9rem;
-}
-
-input[type="number"]:focus {
-  outline: none;
-  border-color: var(--primary);
-}
-
-/* Update plaid settings container */
-.plaid-setting {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1rem 0;
-}
-
-/* Add shuffle icon styles */
-.shuffle-icon {
-  width: 16px;
-  height: 16px;
-}
-
-/* Update the specific button styles */
-.preview-generate-btns .btn--both {
-  background: var(--primary);
-  border-color: var(--primary);
-  color: white;
-}
-
-.preview-generate-btns .btn--both:disabled {
-  background: var(--primary);
-  opacity: 0.5;
-}
-
-.preview-generate-btns .btn--both .shuffle-icon {
-  stroke: white;
-}
-
-/* Add this to ensure the container allows alignment */
-.preview-section {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-/* Add media queries for responsive grid */
 @media (max-width: 1200px) {
   .liked-plaids {
     grid-template-columns: repeat(5, 80px);

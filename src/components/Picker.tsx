@@ -69,7 +69,7 @@ export const TwillPicker: React.FC<TwillPickerProps> = ({ twill, setTwill }) => 
 
   return (
     <div className="input-container">
-      <label className="input-label">Twill:</label>
+      <label className="input-label">Twill</label>
       <div className="radio-group">
         {[
           { value: 'tartan', label: 'Tartan' },
