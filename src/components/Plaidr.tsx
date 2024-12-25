@@ -12,7 +12,9 @@ import ImageUploader from "./ImageUploader";
 import PreviewSizeInput from "./PreviewSizeInput";
 import LikedPlaids from "./LikedPlaids";
 import "./styles.css";
-import Accordion from './Accordion';
+import Accordion from "./Accordion";
+import DownloadButton from "./DownloadButton";
+import Hero from './Hero';
 
 import { PlaidSettings, LikedPlaid } from "../types";
 
@@ -61,10 +63,10 @@ interface LikeButtonProps {
 const LikeButton = ({ liked, handleLike }: LikeButtonProps) => (
   <div className="preview-like__btn">
     {liked ? (
-      <span>💜</span>
+      <span className="like-status">Liked</span>
     ) : (
-      <button onClick={handleLike} className="btn btn--primary">
-        💜
+      <button onClick={handleLike} className="like-button">
+        Like
       </button>
     )}
   </div>
@@ -185,14 +187,15 @@ const Plaidr = () => {
 
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <Hero plaidCanvas={plaidImageCanvas} />
       <FullScreenOverLay />
       <div className="flex flex-col gap-8">
         {/* Update grid to use full width and equal columns */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
-          {/* Left column wrapper - add full width */}
-          <div className="w-full">
+          {/* Left column wrapper */}
+          <div className="w-full flex flex-col gap-8">
             {/* Upload/Preview Section */}
-            <div className="content-section mb-8">
+            <div className="content-section">
               {showUploader ? (
                 <ImageUploader
                   startUploading={() => setIsLoading(true)}
@@ -205,13 +208,13 @@ const Plaidr = () => {
                 />
               ) : (
                 <div className="preview-section">
-                  <button 
+                  <button
                     onClick={() => setShowUploader(true)}
                     className="back-button mb-4"
                   >
                     ← Back to Upload
                   </button>
-                  
+
                   <ImagePreviewTab
                     image={image}
                     isLoading={isLoading}
@@ -222,7 +225,7 @@ const Plaidr = () => {
               )}
             </div>
 
-            {/* Settings Section */}
+            {/* Settings Section - Moved here */}
             {!showUploader && plaidSettings.colors.length > 0 && (
               <div className="content-section">
                 <Accordion title="Plaid Settings" defaultExpanded={true}>
@@ -264,43 +267,54 @@ const Plaidr = () => {
             )}
           </div>
 
-          {/* Right column wrapper - add full width and adjust sticky behavior */}
-          <div className="w-full">
+          {/* Right column wrapper - now only has preview and liked plaids */}
+          <div className="w-full flex flex-col gap-8">
             {!showUploader && plaidSettings.colors.length > 0 && (
-              <div className="content-section h-fit lg:sticky lg:top-8">
-                <h2 className="text-lg font-semibold mb-4">Preview</h2>
-                <div className="plaid-preview-container">
-                  <img
-                    src={plaidPreview || undefined}
-                    alt="preview"
-                    className="plaid-preview-image"
-                    onClick={() => setShowOverlay(true)}
-                  />
-                  <LikeButton liked={liked} handleLike={handleLike} />
+              <>
+                <div className="content-section">
+                  <h2 className="text-lg font-semibold mb-4">Preview</h2>
+                  <div className="preview-container">
+                    <div className="preview-generate-btns">
+                      <GenerateButtons
+                        getNewPivots={getNewPivots}
+                        getNewColors={getNewColors}
+                        setPivotsAndColors={(pivotsAndColors) =>
+                          onChangePlaidSettings({
+                            ...plaidSettings,
+                            ...pivotsAndColors,
+                          })
+                        }
+                        hasColors={!!imageArray.length}
+                      />
+                    </div>
+                    <div className="plaid-preview-container">
+                      <img
+                        src={plaidPreview || undefined}
+                        alt="preview"
+                        className="plaid-preview-image"
+                        onClick={() => setShowOverlay(true)}
+                      />
+                      <LikeButton liked={liked} handleLike={handleLike} />
+                    </div>
+                    <p className="preview-hint">Click preview to view in full screen</p>
+                    <div className="preview-actions">
+                      {plaidPreview && <DownloadButton imageUrl={plaidPreview} />}
+                    </div>
+                  </div>
                 </div>
-                <div className="mt-4">
-                  <GenerateButtons
-                    getNewPivots={getNewPivots}
-                    getNewColors={getNewColors}
-                    setPivotsAndColors={(pivotsAndColors) =>
-                      onChangePlaidSettings({ ...plaidSettings, ...pivotsAndColors })
-                    }
-                    hasColors={!!imageArray.length}
+
+                <div className="content-section">
+                  <h2 className="text-lg font-semibold mb-4">Liked Plaids</h2>
+                  <LikedPlaids
+                    handleSelectPlaid={handleSelectLiked}
+                    likedPlaids={likedPlaids}
+                    setLikedPlaids={setLikedPlaids}
+                    setNextId={setNextId}
                   />
                 </div>
-              </div>
+              </>
             )}
           </div>
-        </div>
-
-        {/* Bottom section - Liked plaids */}
-        <div className="content-section">
-          <LikedPlaids
-            handleSelectPlaid={handleSelectLiked}
-            likedPlaids={likedPlaids}
-            setLikedPlaids={setLikedPlaids}
-            setNextId={setNextId}
-          />
         </div>
       </div>
     </div>
