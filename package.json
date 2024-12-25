@@ -1,7 +1,7 @@
 {
   "name": "plaidr",
   "version": "0.1.0",
-  "homepage": "https://ynynl.github.io/random-plaid-generator",
+  "homepage": "https://ynynl.github.io/plaidr",
   "private": true,
   "dependencies": {
     "@headlessui/react": "^2.2.0",
