@@ -4,7 +4,7 @@
 
 @layer components {
   .container {
-    @apply flex flex-col w-full max-w-7xl mx-auto p-4 gap-6 min-h-screen pb-16;
+    @apply flex flex-col w-full max-w-7xl mx-auto p-4 gap-4;
   }
 
   .btn {
@@ -246,11 +246,6 @@
   .content-section:has(.preview-section),
   .content-section:has(.drag-drop-container) {
     @apply mb-0;
-  }
-
-  /* Add a wrapper class for the main content */
-  .main-content {
-    @apply flex-grow;
   }
 }
 

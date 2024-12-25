@@ -14,6 +14,8 @@
     "@testing-library/user-event": "^13.5.0",
     "buffer": "^6.0.3",
     "ndarray": "^1.0.19",
+    "ndarray-concat-cols": "^1.0.0",
+    "ndarray-concat-rows": "^1.0.1",
     "ndarray-pack": "^1.2.1",
     "ndarray-show": "^2.0.0",
     "ndarray-tile": "^1.0.3",

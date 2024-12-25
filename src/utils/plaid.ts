@@ -3,19 +3,22 @@ const ndarray = require("ndarray");
 const tile = require("ndarray-tile");
 const pack = require("ndarray-pack");
 const unpack = require("ndarray-unpack");
+const concatRows = require("ndarray-concat-rows");
 
 function generatePlaid({
   colors,
   size,
   twill,
-  pivots
+  pivots,
 }: PlaidOptions): number[][][] {
   if (size % 4 !== 0) {
     throw new Error("Invalid size input. Please input a multiple of 4");
   }
 
   if (colors.length !== pivots.length + 1) {
-    throw new Error("Invalid input. Please provide pivot for each color except the last one.");
+    throw new Error(
+      "Invalid input. Please provide pivot for each color except the last one."
+    );
   }
 
   const sett = createSett(size, colors, pivots);
@@ -23,25 +26,31 @@ function generatePlaid({
   const rotatedWrap = rotateWrap(size, wrap);
   const pattern = createPattern(twill);
   const mask = createMask(size, pattern);
-  const plaid = applyTwill(size, rotatedWrap, mask, wrap);
-  const unpackedPlaid = unpack(plaid);
+  const quarterPlaid = applyTwill(size, rotatedWrap, mask, wrap);
+  const unpackedPlaid = unpack(quarterPlaid);
 
   return unpackedPlaid;
 }
 
-function createSett(size: number, colors: number[][], pivots: number[][]): NDArray {
-  const sett: NDArray = ndarray(new Float64Array(size * 3), [size, 3]);
+function createSett(
+  size: number,
+  colors: number[][],
+  pivots: number[][]
+): NDArray {
+  // Create initial sett
+  const halfSize = size / 2;
+  const sett: NDArray = ndarray(new Float64Array(halfSize * 3), [halfSize, 3]);
   const background = colors[colors.length - 1];
 
-  // Set background color
-  for (let i = 0; i < size; ++i) {
+  // Set background color for half size
+  for (let i = 0; i < halfSize; ++i) {
     sett.set(i, 0, background[0]);
     sett.set(i, 1, background[1]);
     sett.set(i, 2, background[2]);
   }
 
-  // Set thread colors
-  const threads = createThreads(size, pivots);
+  // Set thread colors for half size
+  const threads = createThreads(halfSize, pivots);
   const numOfBand = colors.length - 1;
 
   for (let colorIndex = 0; colorIndex < numOfBand; ++colorIndex) {
@@ -52,7 +61,17 @@ function createSett(size: number, colors: number[][], pivots: number[][]): NDArr
     }
   }
 
-  return sett;
+  // Create reversed version
+  const reversedSett = ndarray(new Float64Array(halfSize * 3), [halfSize, 3]);
+  for (let i = 0; i < halfSize; i++) {
+    reversedSett.set(i, 0, sett.get(halfSize - 1 - i, 0));
+    reversedSett.set(i, 1, sett.get(halfSize - 1 - i, 1));
+    reversedSett.set(i, 2, sett.get(halfSize - 1 - i, 2));
+  }
+
+  // Concatenate original and reversed
+  const fullSett = concatRows([sett, reversedSett]);
+  return fullSett;
 }
 
 function createThreads(size: number, pivots: number[][]): number[][] {
@@ -114,7 +133,9 @@ function createPattern(twill: string): TwillPattern {
   };
 
   if (!twillMap.hasOwnProperty(twill)) {
-    throw new Error("Invalid twill input. Please input 'tartan', 'madras', or 'net'");
+    throw new Error(
+      "Invalid twill input. Please input 'tartan', 'madras', or 'net'"
+    );
   }
 
   return twillMap[twill];
@@ -127,7 +148,12 @@ function createMask(size: number, pattern: TwillPattern): NDArray {
   return mask;
 }
 
-function applyTwill(size: number, rotatedWrap: NDArray, mask: NDArray, wrap: NDArray): NDArray {
+function applyTwill(
+  size: number,
+  rotatedWrap: NDArray,
+  mask: NDArray,
+  wrap: NDArray
+): NDArray {
   // Apply twill pattern
   for (let i = 0; i < size; i++) {
     for (let j = 0; j < size; j++) {
@@ -139,12 +165,11 @@ function applyTwill(size: number, rotatedWrap: NDArray, mask: NDArray, wrap: NDA
     }
   }
 
-  // Unpack plaid
+  // Create  plaid
   const plaid = ndarray(wrap.data, [size, size, 3]);
+
 
   return plaid;
 }
 
 export default generatePlaid;
-
-

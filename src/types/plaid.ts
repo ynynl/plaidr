@@ -6,8 +6,14 @@ export interface PlaidOptions {
 }
 
 export type TwillPattern = number[][];
-export type NDArray = {
-  data: Float64Array;
-  get: (i: number, j: number, k?: number) => number;
-  set: (i: number, j: number, k?: number, value?: number) => void;
-}; 
+export interface NDArray {
+  data: Float64Array | Float32Array;
+  shape: number[];
+  stride?: number[];
+  offset?: number;
+  pick: (...args: (number | null)[]) => NDArray;
+  step: (dir: number) => NDArray;
+  transpose: (a: number, b: number) => NDArray;
+  get: (...args: number[]) => number;
+  set: (...args: number[]) => void;
+} 
