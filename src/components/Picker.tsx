@@ -42,7 +42,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
 
   return (
     <div className="input-container">
-      <label htmlFor="numOfColor" className="input-label">Bands:</label>
+      <label htmlFor="numOfColor" className="input-label">Bands</label>
       <input
         disabled={disabled}
         type="range"
@@ -108,7 +108,7 @@ export const SizePicker: React.FC<SizePickerProps> = ({ size, setSize }) => {
 
   return (
     <div className="input-container">
-      <label htmlFor="size" className="input-label">Pattern Size </label>
+      <label htmlFor="size" className="input-label">Pattern Size</label>
       <input
         type="range"
         id="size"

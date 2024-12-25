@@ -16,7 +16,7 @@ const PreviewSizeInput: React.FC<PreviewSizeInputProps> = ({
 }) => {
   return (
     <div className="input-container">
-      <label htmlFor="width" className="input-label">Preview Size:</label>
+      <label htmlFor="width" className="input-label">Preview Size</label>
       <div className="preview-size-input">
         <input
           type="number"

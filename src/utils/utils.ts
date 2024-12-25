@@ -1,5 +1,6 @@
 import generatePlaid from "./plaid";
 import { PlaidOptions } from "../types/plaid";
+import heic2any from 'heic2any';
 
 export function getRandomPair(): [number, number] {
   const pair: [number, number] = [Math.random(), Math.random()];
@@ -112,4 +113,67 @@ export const generateThumbNailImgSrc = (plaidSetting: PlaidOptions): string => {
   const plaidImageCanvas = generatePlaidImageCanvas(plaidSetting);
   if (!plaidImageCanvas) return "";
   return canvasToImgSrc(plaidImageCanvas, 50, 50);
+};
+
+export const processImage = async (file: File): Promise<number[][]> => {
+  let imageBlob = file;
+  
+  // Convert HEIC to JPEG if needed
+  if (file.type === 'image/heic') {
+    try {
+      const convertedBlob = await heic2any({
+        blob: file,
+        toType: 'image/jpeg',
+      });
+      imageBlob = new File([convertedBlob as Blob], file.name, { type: 'image/jpeg' });
+    } catch (error) {
+      console.error('Error converting HEIC:', error);
+      throw error;
+    }
+  }
+
+  // Process image to RGB array with resizing
+  const img = await createImageBitmap(imageBlob);
+  const canvas = document.createElement("canvas");
+  
+  // Resize large images to prevent memory issues
+  const MAX_SIZE = 800;
+  let width = img.width;
+  let height = img.height;
+  
+  if (width > MAX_SIZE || height > MAX_SIZE) {
+    if (width > height) {
+      height = Math.round((height * MAX_SIZE) / width);
+      width = MAX_SIZE;
+    } else {
+      width = Math.round((width * MAX_SIZE) / height);
+      height = MAX_SIZE;
+    }
+  }
+  
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Could not get canvas context");
+  
+  // Use better quality scaling
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(img, 0, 0, width, height);
+  
+  const imageData = ctx.getImageData(0, 0, width, height);
+  
+  // Sample pixels instead of processing every pixel
+  const SAMPLE_RATE = 4; // Process every 4th pixel
+  const rgbArray: number[][] = [];
+  
+  for (let i = 0; i < imageData.data.length; i += 4 * SAMPLE_RATE) {
+    rgbArray.push([
+      imageData.data[i],
+      imageData.data[i + 1],
+      imageData.data[i + 2]
+    ]);
+  }
+  
+  return rgbArray;
 };

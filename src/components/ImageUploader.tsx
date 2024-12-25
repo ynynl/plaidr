@@ -1,110 +1,57 @@
-import React from "react";
+import { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
-import "./styles.css";
-import sample_1 from "../images/sample-1.jpeg";
-import sample_2 from "../images/sample-2.jpeg";
-import sample_3 from "../images/sample-3.jpeg";
+import { processImage } from "../utils/utils";
 
 interface ImageUploaderProps {
-  setImage: (image: string) => void;
-  handleNewRgbArray: (rgbArray: number[][]) => void;
   startUploading: () => void;
+  setImage: (img: string) => void;
+  handleNewRgbArray: (rgbArray: number[][]) => void;
   showPreview: () => void;
 }
 
-const ImageUploader = ({
+const ImageUploader: React.FC<ImageUploaderProps> = ({
+  startUploading,
   setImage,
   handleNewRgbArray,
-  startUploading,
   showPreview,
-}: ImageUploaderProps) => {
-  const onDrop = (acceptedFiles: File[]) => {
-    // Handle dropped files here
-    startUploading();
-    const uploadedImage = acceptedFiles[0];
-    if (!uploadedImage.type.includes("image")) {
-      alert("Please upload an image file.");
-      return;
-    }
-    const reader = new FileReader();
-    reader.readAsDataURL(uploadedImage);
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        handleImage(reader.result);
+}) => {
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      startUploading();
+      const file = acceptedFiles[0];
+      
+      if (file.type.startsWith('image/') || file.type === 'image/heic') {
+        try {
+          const imageUrl = URL.createObjectURL(file);
+          setImage(imageUrl);
+          const rgbArray = await processImage(file);
+          handleNewRgbArray(rgbArray);
+          showPreview();
+        } catch (error) {
+          console.error('Error processing image:', error);
+        }
       }
-    };
-  };
+    },
+    [startUploading, setImage, handleNewRgbArray, showPreview]
+  );
 
-  const handleImage = (imageSrc: string) => {
-    const img = new Image();
-    img.src = imageSrc;
-    img.onload = () => {
-      // For image preview
-      setImage(imageSrc);
-      // For generating plaid
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const context = canvas.getContext("2d");
-      if (!context) {
-        console.error("Could not get canvas context");
-        return;
-      }
-      context.drawImage(img, 0, 0);
-      const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-      const pixelArray = imageData.data;
-      const newRgbArray = [];
-      for (let i = 0; i < pixelArray.length; i += 4) {
-        const r = pixelArray[i];
-        const g = pixelArray[i + 1];
-        const b = pixelArray[i + 2];
-        newRgbArray.push([r, g, b]);
-      }
-      handleNewRgbArray(newRgbArray);
-      showPreview();
-    };
-  };
-
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: {
+      'image/*': ['.jpg', '.jpeg', '.png', '.heic']
+    },
+    multiple: false,
+  });
 
   return (
-    <div {...getRootProps()} className="drag-drop-container shadow-box">
-      <input {...getInputProps()} type="file" accept="image/*" />
-      <p>
-        <strong>Drag 'n' drop</strong> image files here, or{" "}
-        <strong>click</strong> to select a photo,
+    <div {...getRootProps()} className="drag-drop-container">
+      <input {...getInputProps()} />
+      <p>Drag & drop an image here, or click to select</p>
+      <p className="text-sm text-gray-500">
+        Supports JPG, PNG, and Live Photos
       </p>
-      <p>
-        or <strong>try one of the following</strong>
-      </p>
-      <div
-        {...getRootProps({
-          onClick: (event) => event.stopPropagation(),
-        })}
-        style={{ display: "flex", gap: "12px" }}
-      >
-        <ExampleImage src={sample_1} handleImage={handleImage} />
-        <ExampleImage src={sample_2} handleImage={handleImage} />
-        <ExampleImage src={sample_3} handleImage={handleImage} />
-      </div>
     </div>
   );
 };
 
 export default ImageUploader;
-
-interface ExampleImageProps {
-  src: string;
-  handleImage: (imageSrc: string) => void;
-}
-
-const ExampleImage = ({ src, handleImage }: ExampleImageProps) => {
-  return (
-    <img
-      src={src}
-      alt="Example"
-      onClick={() => handleImage(src)}
-      style={{ borderRadius: "50%", width: "36px", height: "36px" }}
-    />
-  );
-};

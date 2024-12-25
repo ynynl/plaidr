@@ -1,7 +1,7 @@
 {
   "name": "plaidr",
   "version": "0.1.0",
-  "homepage": "https://ynynl.github.io/plaidr",
+  "homepage": "https://ynynl.github.io/random-plaid-generator",
   "private": true,
   "dependencies": {
     "@headlessui/react": "^2.2.0",
@@ -13,6 +13,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "buffer": "^6.0.3",
+    "heic2any": "^0.0.4",
     "ndarray": "^1.0.19",
     "ndarray-concat-cols": "^1.0.0",
     "ndarray-concat-rows": "^1.0.1",

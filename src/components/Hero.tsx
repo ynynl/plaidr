@@ -4,15 +4,9 @@ interface HeroProps {
   plaidCanvas?: HTMLCanvasElement | null;
 }
 
-const Hero: React.FC<HeroProps> = ({ plaidCanvas }) => {
-  const backgroundStyle = plaidCanvas ? {
-    backgroundImage: `url(${plaidCanvas.toDataURL()})`,
-    opacity: 0.2
-  } : undefined;
-
+const Hero: React.FC<HeroProps> = () => {
   return (
     <div className="hero">
-      <div className="hero-background" style={backgroundStyle} />
       <div className="hero-content">
         <h1 className="hero-title">
           Random Plaid Generator

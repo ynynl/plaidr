@@ -4,7 +4,8 @@
 
 @layer components {
   .container {
-    @apply flex flex-col w-full max-w-7xl mx-auto p-4 gap-4;
+    @apply flex flex-col w-full max-w-7xl mx-auto p-4 gap-4 inset-0 bg-repeat;
+    background-size: 300px;;
   }
 
   .btn {
@@ -90,7 +91,7 @@
   }
 
   .preview-like__btn {
-    @apply absolute bottom-3 right-3 text-sm font-medium;
+    @apply absolute bottom-4 right-4 text-sm font-medium;
   }
 
   .preview-like__btn button {
@@ -106,9 +107,15 @@
   }
 
   .drag-drop-container {
-    @apply border border-dashed border-gray-200 p-6 text-center cursor-pointer flex flex-col items-center gap-4 justify-center rounded-xl min-h-[500px];
-    width: 300px;
-    margin: 0 auto;
+    @apply flex flex-col items-center justify-center w-full h-full min-h-[500px] p-8 border-2 border-dashed border-gray-200 rounded-xl cursor-pointer transition-colors;
+  }
+
+  .drag-drop-container:hover {
+    @apply border-gray-300 bg-gray-50/50;
+  }
+
+  .drag-drop-container p {
+    @apply text-center;
   }
 
   .example-images {
@@ -202,7 +209,7 @@
 
   /* Add hero styles */
   .hero {
-    @apply relative text-center py-12 mb-8 border-b border-gray-200 bg-white overflow-hidden;
+    @apply relative text-center py-12 mb-8 border-b border-gray-200 bg-transparent overflow-hidden;
   }
 
   .hero-background {
@@ -235,17 +242,22 @@
   }
 
   .like-status {
-    @apply bg-blue-50 text-blue-600 px-3 py-1 rounded-full;
+    @apply bg-blue-50 text-blue-600 px-4 py-1.5 rounded-full;
   }
 
   .like-button {
-    @apply bg-white/80 hover:bg-white text-gray-600 hover:text-blue-600 px-3 py-1 rounded-full transition-all border-0 cursor-pointer backdrop-blur-sm;
+    @apply bg-white/80 hover:bg-white text-gray-600 hover:text-blue-600 px-4 py-1.5 rounded-full transition-all border-0 cursor-pointer backdrop-blur-sm;
   }
 
   /* Remove mb-8 from the uploader section */
   .content-section:has(.preview-section),
   .content-section:has(.drag-drop-container) {
     @apply mb-0;
+  }
+
+  /* Update drag-drop container styles */
+  .content-section:has(.drag-drop-container) {
+    @apply p-0 overflow-hidden;
   }
 }
 
