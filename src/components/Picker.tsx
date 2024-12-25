@@ -71,36 +71,25 @@ export const TwillPicker: React.FC<TwillPickerProps> = ({ twill, setTwill }) => 
     <div className="input-container">
       <label className="input-label">Twill:</label>
       <div className="radio-group">
-        <label className="radio-label">
-          <input
-            type="radio"
-            name="twill"
-            value="tartan"
-            checked={twill === "tartan"}
-            onChange={handleTwillChange}
-          />
-          Tartan
-        </label>
-        <label className="radio-label">
-          <input
-            type="radio"
-            name="twill"
-            value="net"
-            checked={twill === "net"}
-            onChange={handleTwillChange}
-          />
-          Net
-        </label>
-        <label className="radio-label">
-          <input
-            type="radio"
-            name="twill"
-            value="madras"
-            checked={twill === "madras"}
-            onChange={handleTwillChange}
-          />
-          Madras
-        </label>
+        {[
+          { value: 'tartan', label: 'Tartan' },
+          { value: 'net', label: 'Net' },
+          { value: 'madras', label: 'Madras' }
+        ].map((option) => (
+          <div key={option.value}>
+            <input
+              type="radio"
+              id={option.value}
+              name="twill"
+              value={option.value}
+              checked={twill === option.value}
+              onChange={handleTwillChange}
+            />
+            <label className="radio-label" htmlFor={option.value}>
+              {option.label}
+            </label>
+          </div>
+        ))}
       </div>
     </div>
   );
