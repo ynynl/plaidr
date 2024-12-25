@@ -1,5 +1,5 @@
 import React from "react";
-import Plaidr from "./components/Main";
+import Main from "./components/Main";
 import './App.css';
 
 const App: React.FC = () => {
@@ -7,7 +7,7 @@ const App: React.FC = () => {
     <div className="App">
       <div className="App-container">
         <main className="App-main">
-          <Plaidr />
+          <Main />
         </main>
       </div>
       <footer className="App-footer">

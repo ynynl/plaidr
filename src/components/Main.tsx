@@ -14,7 +14,8 @@ import LikedPlaids from "./LikedPlaids";
 import "./styles.css";
 import Accordion from "./Accordion";
 import DownloadButton from "./DownloadButton";
-import Hero from './Hero';
+import Hero from "./Hero";
+import FullScreenOverlay from "./FullScreenOverlay";
 
 import { PlaidSettings, LikedPlaid } from "../types";
 
@@ -72,7 +73,7 @@ const LikeButton = ({ liked, handleLike }: LikeButtonProps) => (
   </div>
 );
 
-const Plaidr = () => {
+const Main = () => {
   const [image, setImage] = useState<string>();
   const [imageArray, setImageArray] = useState<number[][]>([]);
   const [plaidSettings, setPlaidSettings] = useState<PlaidSettings>({
@@ -172,23 +173,15 @@ const Plaidr = () => {
     setLiked(true);
   };
 
-  const FullScreenOverLay = () => {
-    if (!plaidImageCanvas || !showOverlay) return null;
-    return (
-      <div
-        className="full_screen_overlay"
-        onClick={() => setShowOverlay(false)}
-        style={{
-          backgroundImage: `url(${plaidImageCanvas.toDataURL()})`,
-        }}
-      />
-    );
-  };
-
   return (
     <div className="container">
       <Hero plaidCanvas={plaidImageCanvas} />
-      <FullScreenOverLay />
+      <FullScreenOverlay
+        showOverlay={showOverlay}
+        setShowOverlay={setShowOverlay}
+        imageUrl={plaidPreview}
+        plaidImageCanvas={plaidImageCanvas}
+      />
       <div className="main-content">
         <div className="flex flex-col gap-8">
           {/* Update grid to use full width and equal columns */}
@@ -297,9 +290,13 @@ const Plaidr = () => {
                         />
                         <LikeButton liked={liked} handleLike={handleLike} />
                       </div>
-                      <p className="preview-hint">Click preview to view in full screen</p>
+                      <p className="preview-hint">
+                        Click preview to view in full screen
+                      </p>
                       <div className="preview-actions">
-                        {plaidPreview && <DownloadButton imageUrl={plaidPreview} />}
+                        {plaidPreview && (
+                          <DownloadButton imageUrl={plaidPreview} />
+                        )}
                       </div>
                     </div>
                   </div>
@@ -323,4 +320,4 @@ const Plaidr = () => {
   );
 };
 
-export default Plaidr;
+export default Main;

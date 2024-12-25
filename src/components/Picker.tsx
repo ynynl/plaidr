@@ -48,8 +48,8 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
         type="range"
         id="numOfColor"
         name="numOfColor"
-        min={2}
-        max={30}
+        min={4}
+        max={60}
         value={numOfColor}
         onChange={handleNumOfColorChange}
       />
