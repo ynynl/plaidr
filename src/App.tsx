@@ -1,5 +1,5 @@
 import React from "react";
-import Plaidr from "./components/Plaidr";
+import Plaidr from "./components/Main";
 import './App.css';
 
 const App: React.FC = () => {
