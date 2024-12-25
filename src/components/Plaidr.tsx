@@ -13,8 +13,6 @@ import PreviewSizeInput from "./PreviewSizeInput";
 import LikedPlaids from "./LikedPlaids";
 import "./styles.css";
 
-import { Tabs, TabList, Tab, TabPanel } from "react-tabs";
-import "./react-tabs.css";
 import { PlaidSettings, LikedPlaid } from "../types";
 
 interface ImagePreviewTabProps {
@@ -83,12 +81,12 @@ const Plaidr = () => {
   const [numOfColor, setNumOfColor] = useState(5);
   const [showOverlay, setShowOverlay] = useState(false); // new state variable
   const [isLoading, setIsLoading] = useState(false);
-  const [tabIndex, setTabIndex] = useState(0);
   const [plaidWidth, setPlaidWidth] = useState(300);
   const [plaidHeight, setPlaidHeight] = useState(300);
   const [likedPlaids, setLikedPlaids] = useState<LikedPlaid[]>([]);
   const [nextId, setNextId] = useState(1);
   const [liked, setLiked] = useState(false);
+  const [showUploader, setShowUploader] = useState(true);
 
   const onChangePlaidSettings = (
     plaidSettings: React.SetStateAction<PlaidSettings>
@@ -185,40 +183,48 @@ const Plaidr = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <FullScreenOverLay />
-      <div className="row-container">
-        <div className="row-item">
-          <Tabs
-            selectedIndex={tabIndex}
-            onSelect={(index) => setTabIndex(index)}
-          >
-            <TabList>
-              <Tab>Upload Image</Tab>
-              <Tab disabled={!image}>Image Preview</Tab>
-              <Tab disabled={!plaidSettings.colors.length}>Plaid Settings</Tab>
-            </TabList>
-
-            <div className="tab-container">
-              <TabPanel>
+      <div className="flex flex-col gap-8">
+        {/* Update grid to use full width and equal columns */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full">
+          {/* Left column wrapper - add full width */}
+          <div className="w-full">
+            {/* Upload/Preview Section */}
+            <div className="content-section mb-8">
+              {showUploader ? (
                 <ImageUploader
                   startUploading={() => setIsLoading(true)}
-                  setImage={setImage}
+                  setImage={(img) => {
+                    setImage(img);
+                    setShowUploader(false);
+                  }}
                   handleNewRgbArray={handleNewRgbArray}
-                  showPreview={() => setTabIndex(1)}
+                  showPreview={() => setShowUploader(false)}
                 />
-              </TabPanel>
+              ) : (
+                <div className="preview-section">
+                  <button 
+                    onClick={() => setShowUploader(true)}
+                    className="back-button mb-4"
+                  >
+                    ← Back to Upload
+                  </button>
+                  
+                  <ImagePreviewTab
+                    image={image}
+                    isLoading={isLoading}
+                    setShowOverlay={setShowOverlay}
+                    showOverlay={showOverlay}
+                  />
+                </div>
+              )}
+            </div>
 
-              <TabPanel>
-                <ImagePreviewTab
-                  image={image}
-                  isLoading={isLoading}
-                  setShowOverlay={setShowOverlay}
-                  showOverlay={showOverlay}
-                />
-              </TabPanel>
-
-              <TabPanel>
+            {/* Settings Section */}
+            {!showUploader && plaidSettings.colors.length > 0 && (
+              <div className="content-section">
+                <h2 className="text-lg font-semibold mb-4">Plaid Settings</h2>
                 <div className="plaid-setting">
                   <TwillPicker
                     twill={plaidSettings.twill}
@@ -252,34 +258,41 @@ const Plaidr = () => {
                     setPlaidHeight={setPlaidHeight}
                   />
                 </div>
-              </TabPanel>
-            </div>
-          </Tabs>
-          <div
-            className="tab-container"
-            style={{ visibility: plaidPreview ? "visible" : "hidden" }}
-          >
-            <div className="preview-container shadow-box ">
-              <img
-                src={plaidPreview || undefined}
-                alt="preview"
-                className="preview-plaid"
-                onClick={() => setShowOverlay(true)}
-                width="100%"
-              />
-              <LikeButton liked={liked} handleLike={handleLike} />
-            </div>
-            <GenerateButtons
-              getNewPivots={getNewPivots}
-              getNewColors={getNewColors}
-              setPivotsAndColors={(pivotsAndColors) =>
-                onChangePlaidSettings({ ...plaidSettings, ...pivotsAndColors })
-              }
-              hasColors={!!imageArray.length}
-            />
+              </div>
+            )}
+          </div>
+
+          {/* Right column wrapper - add full width and adjust sticky behavior */}
+          <div className="w-full">
+            {!showUploader && plaidSettings.colors.length > 0 && (
+              <div className="content-section h-fit lg:sticky lg:top-8">
+                <h2 className="text-lg font-semibold mb-4">Preview</h2>
+                <div className="plaid-preview-container">
+                  <img
+                    src={plaidPreview || undefined}
+                    alt="preview"
+                    className="plaid-preview-image"
+                    onClick={() => setShowOverlay(true)}
+                  />
+                  <LikeButton liked={liked} handleLike={handleLike} />
+                </div>
+                <div className="mt-4">
+                  <GenerateButtons
+                    getNewPivots={getNewPivots}
+                    getNewColors={getNewColors}
+                    setPivotsAndColors={(pivotsAndColors) =>
+                      onChangePlaidSettings({ ...plaidSettings, ...pivotsAndColors })
+                    }
+                    hasColors={!!imageArray.length}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
-        <div className="row-item">
+
+        {/* Bottom section - Liked plaids */}
+        <div className="content-section">
           <LikedPlaids
             handleSelectPlaid={handleSelectLiked}
             likedPlaids={likedPlaids}
