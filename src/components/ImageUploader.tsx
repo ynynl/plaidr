@@ -5,13 +5,20 @@ import sample_1 from "../images/sample-1.jpeg";
 import sample_2 from "../images/sample-2.jpeg";
 import sample_3 from "../images/sample-3.jpeg";
 
+interface ImageUploaderProps {
+  setImage: (image: string) => void;
+  handleNewRgbArray: (rgbArray: number[][]) => void;
+  startUploading: () => void;
+  showPreview: () => void;
+}
+
 const ImageUploader = ({
   setImage,
   handleNewRgbArray,
   startUploading,
   showPreview,
-}) => {
-  const onDrop = (acceptedFiles) => {
+}: ImageUploaderProps) => {
+  const onDrop = (acceptedFiles: File[]) => {
     // Handle dropped files here
     startUploading();
     const uploadedImage = acceptedFiles[0];
@@ -22,11 +29,13 @@ const ImageUploader = ({
     const reader = new FileReader();
     reader.readAsDataURL(uploadedImage);
     reader.onload = () => {
-      handleImage(reader.result);
+      if (typeof reader.result === 'string') {
+        handleImage(reader.result);
+      }
     };
   };
 
-  const handleImage = (imageSrc) => {
+  const handleImage = (imageSrc: string) => {
     const img = new Image();
     img.src = imageSrc;
     img.onload = () => {
@@ -37,6 +46,10 @@ const ImageUploader = ({
       canvas.width = img.width;
       canvas.height = img.height;
       const context = canvas.getContext("2d");
+      if (!context) {
+        console.error("Could not get canvas context");
+        return;
+      }
       context.drawImage(img, 0, 0);
       const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
       const pixelArray = imageData.data;
@@ -58,7 +71,8 @@ const ImageUploader = ({
     <div {...getRootProps()} className="drag-drop-container shadow-box">
       <input {...getInputProps()} type="file" accept="image/*" />
       <p>
-        <strong>Drag 'n' drop</strong> image files here, or <strong>click</strong> to select a photo,
+        <strong>Drag 'n' drop</strong> image files here, or{" "}
+        <strong>click</strong> to select a photo,
       </p>
       <p>
         or <strong>try one of the following</strong>
@@ -79,7 +93,12 @@ const ImageUploader = ({
 
 export default ImageUploader;
 
-const ExampleImage = ({ src, handleImage }) => {
+interface ExampleImageProps {
+  src: string;
+  handleImage: (imageSrc: string) => void;
+}
+
+const ExampleImage = ({ src, handleImage }: ExampleImageProps) => {
   return (
     <img
       src={src}

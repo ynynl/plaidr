@@ -1,19 +1,26 @@
 import React, { useEffect } from "react";
 import { generateThumbNailImgSrc } from "../utils/utils";
+import { LikedPlaid } from "../types";
 import "./styles.css";
 
-const LikedPlaids = ({
+interface LikedPlaidsProps {
+  likedPlaids: LikedPlaid[];
+  setLikedPlaids: (plaids: LikedPlaid[]) => void;
+  setNextId: (id: number) => void;
+  handleSelectPlaid: (plaid: LikedPlaid) => void;
+}
+
+const LikedPlaids: React.FC<LikedPlaidsProps> = ({
   likedPlaids,
   setLikedPlaids,
   setNextId,
   handleSelectPlaid,
 }) => {
-  // Retrieve likedPlaids from localStorage when the component mounts
   useEffect(() => {
     const storedLikedPlaids = localStorage.getItem("likedPlaids");
     if (storedLikedPlaids) {
       setLikedPlaids(
-        JSON.parse(storedLikedPlaids).map((plaid) => ({
+        JSON.parse(storedLikedPlaids).map((plaid: LikedPlaid) => ({
           ...plaid,
           src: generateThumbNailImgSrc(plaid),
         }))
@@ -39,4 +46,5 @@ const LikedPlaids = ({
     </div>
   );
 };
-export default LikedPlaids;
+
+export default LikedPlaids; 
