@@ -133,6 +133,35 @@
   .shadow-box {
     @apply w-[300px] h-[300px] mx-auto flex justify-center items-center;
   }
+
+  /* Add accordion styles */
+  .accordion {
+    @apply w-full;
+  }
+
+  .accordion-header {
+    @apply flex items-center justify-between w-full px-4 py-2 text-left bg-gray-50 hover:bg-gray-100 transition-colors cursor-pointer;
+  }
+
+  .accordion-title {
+    @apply text-sm font-medium text-gray-700;
+  }
+
+  .accordion-icon {
+    @apply w-5 h-5 text-gray-500 transition-transform;
+  }
+
+  .accordion-content {
+    @apply overflow-hidden transition-all duration-200 ease-in-out;
+  }
+
+  .accordion-content[data-expanded="true"] {
+    @apply max-h-[500px];
+  }
+
+  .accordion-content[data-expanded="false"] {
+    @apply max-h-0;
+  }
 }
 
 @media (max-width: 1200px) {

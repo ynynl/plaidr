@@ -12,6 +12,7 @@ import ImageUploader from "./ImageUploader";
 import PreviewSizeInput from "./PreviewSizeInput";
 import LikedPlaids from "./LikedPlaids";
 import "./styles.css";
+import Accordion from './Accordion';
 
 import { PlaidSettings, LikedPlaid } from "../types";
 
@@ -224,40 +225,41 @@ const Plaidr = () => {
             {/* Settings Section */}
             {!showUploader && plaidSettings.colors.length > 0 && (
               <div className="content-section">
-                <h2 className="text-lg font-semibold mb-4">Plaid Settings</h2>
-                <div className="plaid-setting">
-                  <TwillPicker
-                    twill={plaidSettings.twill}
-                    setTwill={(twill) =>
-                      onChangePlaidSettings((plaidSettings) => ({
-                        ...plaidSettings,
-                        twill,
-                      }))
-                    }
-                  />
-                  <SizePicker
-                    size={plaidSettings.size}
-                    setSize={(size) =>
-                      onChangePlaidSettings((plaidSettings) => ({
-                        ...plaidSettings,
-                        size,
-                      }))
-                    }
-                  />
-                  <ColorPicker
-                    numOfColor={numOfColor}
-                    setNumOfColor={setNumOfColor}
-                    getNewColors={getNewColors}
-                    setPlaidSettings={onChangePlaidSettings}
-                    disabled={!imageArray.length}
-                  />
-                  <PreviewSizeInput
-                    plaidWidth={plaidWidth}
-                    plaidHeight={plaidHeight}
-                    setPlaidWidth={setPlaidWidth}
-                    setPlaidHeight={setPlaidHeight}
-                  />
-                </div>
+                <Accordion title="Plaid Settings" defaultExpanded={true}>
+                  <div className="plaid-setting">
+                    <TwillPicker
+                      twill={plaidSettings.twill}
+                      setTwill={(twill) =>
+                        onChangePlaidSettings((plaidSettings) => ({
+                          ...plaidSettings,
+                          twill,
+                        }))
+                      }
+                    />
+                    <SizePicker
+                      size={plaidSettings.size}
+                      setSize={(size) =>
+                        onChangePlaidSettings((plaidSettings) => ({
+                          ...plaidSettings,
+                          size,
+                        }))
+                      }
+                    />
+                    <ColorPicker
+                      numOfColor={numOfColor}
+                      setNumOfColor={setNumOfColor}
+                      getNewColors={getNewColors}
+                      setPlaidSettings={onChangePlaidSettings}
+                      disabled={!imageArray.length}
+                    />
+                    <PreviewSizeInput
+                      plaidWidth={plaidWidth}
+                      plaidHeight={plaidHeight}
+                      setPlaidWidth={setPlaidWidth}
+                      setPlaidHeight={setPlaidHeight}
+                    />
+                  </div>
+                </Accordion>
               </div>
             )}
           </div>
